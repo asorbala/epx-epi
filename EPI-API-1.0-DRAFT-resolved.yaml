@@ -1,0 +1,2325 @@
+openapi: 3.0.1
+info:
+  title: EPX Payment Interface
+  description: The API utilizes Representational state transfer (REST) to describe and standardize access to the EPX Payment Interface (EPI). The use of transport layer security (TLS) is enforced on all requests. All requests and responses will be in JSON.
+  version: '1.0'
+servers:
+  - url: 'https://epi.epxuap.com'
+paths:
+  /sale:
+    post:
+      tags:
+        - Sales (AuthorizeAndCapture)
+      description: 'The Sale transaction is an authorization and a capture within the same transaction, provided the authorization portion is approved and is otherwise able to settle. When a sale transaction is run against an account number, the authorization occurs for the dollar amount in the transaction. Imidiately after, the capture automatically occurs so that it will settle during the next settlement window.'
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: c835125642ea17bd6a512c994b844dbeeebcde9fe23eacd69e5d23f6bd92b60b
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+            examples:
+              '0':
+                value: |-
+                  {
+                      "account": "4111111111111111",
+                      "amount": 127.99,
+                      "transaction": 123
+                  }
+              '1':
+                value: |-
+                  {
+                    "amount": 127.99
+                  }
+              '2':
+                value: |-
+                  {
+                    "trackData": "4111111111111111=49121010000000000000?",
+                    "amount": 10.00,
+                    "transaction": 123,
+                    "invoiceNumber": "ABC-123",
+                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101",
+                    "cardEntryMethod": "G"
+                  }
+              '3':
+                value: |-
+                  {
+                    "account": "4111111111111111",
+                    "amount": 127.99,
+                    "transaction": 123,
+                    "taxAmount": 7.99,
+                    "taxExempt": true,
+                    "invoiceNumber": "ABC-123",
+                    "enhancedData": [
+                      {
+                        "dataType": "G",
+                        "line": 1,
+                        "1": "123 Customer Street",
+                        "2": "7.99",
+                        "3": "1",
+                        "4": "0.00",
+                        "5": "0.00",
+                        "6": "0.00",
+                        "14": "8725",
+                        "15": "Power Usage",
+                        "16": "Utility Bill",
+                        "17": "123",
+                        "18": "KWH",
+                        "19": "0.08",
+                        "20": "0.00",
+                        "21": "0.00",
+                        "22": "0.00",
+                        "23": "120.00"
+                      },
+                      {
+                        "dataType": "G",
+                        "line": 2,
+                        "1": "123 Main Street",
+                        "2": "7.99",
+                        "3": "1",
+                        "4": "0.00",
+                        "5": "0.00",
+                        "6": "0.00",
+                        "14": "8725",
+                        "15": "Power Usage",
+                        "16": "Utility Bill",
+                        "17": "123",
+                        "18": "KWH",
+                        "19": "0.08",
+                        "20": "0.00",
+                        "21": "0.00",
+                        "22": "0.00",
+                        "23": "20.00"
+                      }
+                    ],
+                    "userData": {
+                      "1": "Mobile Payment",
+                      "3": "Off Peak Measurement"
+                    },
+                    "special": {
+                      "2": "soloar",
+                      "4": "regen"
+                    }
+                  }
+              '4':
+                value: |-
+                  {
+                    "account": "4111111111111111",
+                    "amount": 127.99,
+                    "capture": false,
+                    "transaction": 123
+                  }
+              '5':
+                value: |-
+                  {
+                     "amount":12.99,
+                     "account":"4111111111111111",
+                     "expirationDate":"2211",
+                     "cvv2":"123",
+                     "invoiceNumber":"ABC-123",
+                     "orderNumber":"ABC-123",
+                     "transaction":123,
+                     "firstName":"Joe",
+                     "lastName":"Doe",
+                     "address":"123 Main Street",
+                     "city":"City",
+                     "state":"CA",
+                     "zipCode":"12345",
+                     "cardEntryMethod":"X",
+                     "system/tranType":"CCR1",
+                     "userdata":{
+                        "1":"ABC-123",
+                        "2":"ABC-123",
+                        "10":"ABC-123"
+                     },
+                     "referencenumber":"ABC-123",
+                     "rentalnumber":"ABC-123"
+                  }
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "authorization": "016518",
+                        "response": "00",
+                        "text": "APPROVAL 016518"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBWHB6WA5HJ3D71",
+                        "timestamp": "2021-01-20T06:16:24Z"
+                      }
+                    }
+                '1':
+                  value: |-
+                    {
+                      "data": {
+                        "authorization": "016522",
+                        "response": "00",
+                        "text": "APPROVAL 016522"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBWMHKY8GR8AD76",
+                        "timestamp": "2021-01-20T06:19:15Z"
+                      }
+                    }
+                '2':
+                  value: |-
+                    {
+                      "data": {
+                        "authorization": "016523",
+                        "response": "00",
+                        "text": "APPROVAL 016523"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBWY6U3RMGHWD78",
+                        "timestamp": "2021-01-20T06:20:09Z"
+                      }
+                    }
+                '3':
+                  value: |-
+                    {
+                      "data": {
+                        "authorization": "016532",
+                        "response": "00",
+                        "text": "APPROVAL 016532"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBD29K4713FQD7E",
+                        "timestamp": "2021-01-20T06:25:40Z"
+                      }
+                    }
+                '4':
+                  value: |-
+                    {
+                      "data": {
+                        "authorization": "016682",
+                        "response": "00",
+                        "text": "APPROVAL 016682"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBPV3A0Q5UEXDF9",
+                        "timestamp": "2021-01-20T10:11:06Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /sale (Authorization only):
+    post:
+      tags:
+        - Authorization
+      description: 'For an authorize only (no capture), include the capture flag and set it to false. All authorize only transactions will need to be individually Captured at a later time to settle during the next settlement window.'
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 161a30605db6b2c0199f839e06d7b4bdc1dbf27a9e2648e912b1729dc779b28c
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_1'
+            examples:
+              '0':
+                value: |-
+                  {
+                    "account": "4111111111111111",
+                    "amount": 127.99,
+                    "capture": false,
+                    "transaction": 123
+                  }
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "authorization": "016532",
+                        "response": "00",
+                        "text": "APPROVAL 016532"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBD29K4713FQD7E",
+                        "timestamp": "2021-01-20T06:25:40Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /sale/00DX6KRLUGKBEQ8E7N6:
+    post:
+      tags:
+        - Sales (AuthorizeAndCapture)
+      description: This is an example of a BRIC/GUID-based token transaction.
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: da704e9ff33536b6d6a5519b68aa378b0c3d52826f74373fa372ef804127e168
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_2'
+            examples:
+              '0':
+                value: |-
+                  {
+                    "amount": 127.99
+                  }
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "authorization": "016519",
+                        "response": "00",
+                        "text": "APPROVAL 016519"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBWL7MTR20ADD74",
+                        "timestamp": "2021-01-20T06:18:32Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /refund/00DXDBDGY5T22YEVD7Y:
+    post:
+      tags:
+        - Refund
+      description: 'The Linked Refund is a BRIC based transaction used to return funds to an account previously acted upon by a sale or capture transaction. A single refund for the full amount of the original transaction, or numerous partial refunds can be performed with dollar amounts less than and not to exceed the total amount of the original sale or capture being acted upon.'
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: d20e43e18824af86f45de6d2a795a1d3145766d979e75a972ba826c9fb991cb7
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_3'
+            examples:
+              '0':
+                value: |-
+                  {
+                    "amount": 127.99,
+                    "transaction": 123
+                  }
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "authorization": "709414",
+                        "response": "00",
+                        "text": "APPROVAL 709414"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBDNZD1959FYD7U",
+                        "timestamp": "2021-01-20T06:37:28Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /ach:
+    post:
+      tags:
+        - Sales (AuthorizeAndCapture)
+      description: Automated Clearing House (ACH) transactions are transactions tied directly to a checking or savings account.
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 1c29b2223582a4cdbf5a508a8e1104c0e75d6de657462b08e52386db31849fe3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_4'
+            examples:
+              '0':
+                value: |-
+                  {
+                    "account": "4111111111111111",
+                    "routingNumber": 1234567890,
+                    "amount": 127.99,
+                    "transaction": 123,
+                    "address": {
+                      "firstName": "Galileo",
+                      "lastName": "Galilei"
+                    }
+                  }
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": null,
+                      "errors": [
+                        "Please contact customer support"
+                      ],
+                      "reference": {
+                        "bric": "00DXDBNZ73A0J5UUDDV",
+                        "timestamp": "2021-01-20T09:34:35Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /sale/00DXDBD29K4713FQD7E/capture:
+    put:
+      tags:
+        - Capture (Post-Authorization)
+      description: The Capture transactions are a capture of a previous pre-authorization. A capture can be done on the amount equal to or less than the dollar amount of the referenced pre-authorization.
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: c8a4e6a6e81c25daa0d5927414ecdc2b4bac569b161c20b98bd46b583203e266
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_5'
+            examples:
+              '0':
+                value: |-
+                  {
+                    "amount": 127.99,
+                    "transaction": 123
+                  }
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "response": "00",
+                        "text": "APPROVAL"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBDGY5T22YEVD7Y",
+                        "timestamp": "2021-01-20T06:33:33Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /sale/capture:
+    post:
+      tags:
+        - Capture (Post-Authorization)
+      description: The Force Capture transactions are a capture of a previous pre-authorization. A capture can be done on the amount equal to or less than the dollar amount of the referenced pre-authorization.
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: a2f7ee8b2294150a8551367a75774d0685edb4517bb58c44bcff59d6141519f7
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_6'
+            examples:
+              '0':
+                value: |-
+                  {
+                    "account": "4111111111111111",
+                    "amount": 127.99,
+                    "transaction": 123
+                  }
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "response": "S8",
+                        "text": "NO AUTHORIZATION"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBFX2PVND9Q7D9A",
+                        "timestamp": "2021-01-20T07:09:14Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /refund:
+    post:
+      tags:
+        - Refund
+      description: 'The Unlinked Refund transaction is a transaction used to return funds to an account previously acted upon by a sale or capture transaction. A single refund for the full amount of the original transaction, or numerous partial refunds can be performed with dollar amounts less than and not to exceed the total amount of the original sale or capture being acted upon.'
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: e26cbdbba351243cdb0e3cf3cc57bc68c2fdead54a8e21727fcc7e07f1748951
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_7'
+            examples:
+              '0':
+                value: |-
+                  {
+                    "account": "4111111111111111",
+                    "amount": 127.99,
+                    "transaction": 123
+                  }
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "authorization": "095573",
+                        "response": "00",
+                        "text": "APPROVAL 095573"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBDPWZRN91NND7V",
+                        "timestamp": "2021-01-20T06:38:17Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /batch:
+    put:
+      tags:
+        - Batch Close
+      description: A Batch transaction will close all captured transactions.
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 57a90155807c4dc504ec11095e552fbf81b26fea26ea448314cca5d8537235c1
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "response": "00",
+                        "text": "APPROVAL"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBE7QZH4MDT2D8B",
+                        "timestamp": "2021-01-20T06:46:10Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /void/00DXDBDZPXJ05JGVD83:
+    put:
+      tags:
+        - Void (Cancel)
+      description: 'The Void transaction is used to stop a authorization, sale, capture, or refund transaction prior to settlement. If the transaction has already been settled, this function will no longer be available.'
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 43bc00b55dc2e61485d94c9fa96898aa6058563f31a399c2db0d9adae94845cc
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "response": "00",
+                        "text": "APPROVAL"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBE4D4BFF3JHD88",
+                        "timestamp": "2021-01-20T06:44:17Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /sale/capture/00DXDBX7AJ3ZU8ENDAH:
+    post:
+      tags:
+        - Capture (Post-Authorization)
+      description: BRIC based Force Capture transactions are a capture of a previous pre-authorization. A capture can be done on the amount equal to or less than the dollar amount of the referenced pre-authorization.
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 1f569ae5f16214db50208e8dabd86c7973c5e18d80754e8eecfe199a607c1b7d
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_8'
+            examples:
+              '0':
+                value: |-
+                  {
+                    "amount": 127.99,
+                    "transaction": 123
+                  }
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "authorization": "797956",
+                        "response": "00",
+                        "text": "APPROVAL 797956"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBXA5UE4FNNTDAJ",
+                        "timestamp": "2021-01-20T07:57:21Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /sale/inc/00DXDBELZAJRQHK9D8L:
+    put:
+      tags:
+        - Authorization
+      description: 'To add an additional amount of money to a transaction, or incrementally authorize a new amount, the original transaction BRIC is required. The amount in the json example below is the additional amount needed. For example, if the initial authorization was $20 and the new amount needs to be $30, the json payload would show an Amount of 10.'
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 107d0f9aef1f44ed2da42447c5d40eaaad1ef1280e23476c3e7e10a37ce66a67
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_9'
+            examples:
+              '0':
+                value: |-
+                  {
+                    "amount": 10,
+                    "transaction": 123
+                  }
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "authTotalAuthorized": "137.99",
+                        "authorization": "016554",
+                        "response": "00",
+                        "text": "APPROVAL 016554"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBEP5655Z30QD8Y",
+                        "timestamp": "2021-01-20T06:55:37Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /avs:
+    post:
+      tags:
+        - Verify (AVS only)
+      description: Address Verification System (AVS) transactions verify the customer’s address to prevent fraud.
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: ef737eceae3f253052ed242cdf2c985e8ae1d6b02072d55bbbc39cfded4e8f1f
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_10'
+            examples:
+              '0':
+                value: |-
+                  {
+                     "account":"4111111111111111",
+                     "expirationDate":"2211",
+                     "transaction":123,
+                     "firstName":"Joe",
+                     "lastName":"Doe",
+                     "address":"123 Main Street",
+                     "city":"City",
+                     "state":"CA",
+                     "zipCode":"12345"
+                  }
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "authorization": "016639",
+                        "response": "00",
+                        "text": "APPROVAL 016639"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBLJBH93L69EDW6",
+                        "timestamp": "2021-01-20T08:54:47Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /sale/00DXDBDZPXJ05JGVD83:
+    post:
+      tags:
+        - Sale Edit (Tip Adjust)
+      description: 'The Edit Authorization and Capture transaction is used to edit an open Sale (Authorization and Capture) transaction. The transaction is a BRIC-based request and can only be performed on an approved Sale transaction that has not been voided, closed, or settled.'
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: ce5277846652fac3af5c8df848ca016a5bb3b06dcc259471d75b28741a759889
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_11'
+            examples:
+              '0':
+                value: |-
+                  {
+                    "amount": 131.99,
+                    "tipAmount": 5.55
+                  }
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "authorization": "016542",
+                        "response": "00",
+                        "text": "APPROVAL 016542"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBE0DBFALZL8D86",
+                        "timestamp": "2021-01-20T06:42:06Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /reverse/00DXDBND3KARE18UDDJ:
+    post:
+      tags:
+        - Reversal
+      description: The Reverse transaction is used to reverse the authorization of funds on a credit card. This will release the funds that are being held at the issuing bank.
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 6b79e0ffe5598f34ed42abb5fb99978cae9f10d6108b4565963522ae2348120c
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_12'
+            examples:
+              '0':
+                value: |-
+                  {
+                    "batchId": "123",
+                    "transaction": 123
+                  }
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "authorization": "016658",
+                        "response": "00",
+                        "text": "APPROVAL 016658"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBNH34TYRJY8DDM",
+                        "timestamp": "2021-01-20T09:28:30Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /batch/123:
+    post:
+      tags:
+        - Batch Close
+      description: A Batch Close call that closes a selected number of transactions based off IDs provided.
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 2864c6a874625db8703e1ec2f430f5df6d7ed9090f861c0d54dec3b7d984367d
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_13'
+            examples:
+              '0':
+                value: |-
+                  {
+                    "transaction": 123
+                  }
+      responses:
+        '200':
+          description: Request was successful
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /refund/00DXDBDM70B4HXYKD7R:
+    get:
+      tags:
+        - Transaction Lookup
+      description: Retrieves details of a specific Refund transaction based on the BRIC of the refund.
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: f7222416624309566762854087c9ef49638800281ec0990070d3a8aa8e7d9d59
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": null,
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBN46GN0ER1PDD8",
+                        "timestamp": "2021-01-20T09:21:28Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /sale (Lookup):
+    get:
+      tags:
+        - Transaction Lookup
+      description: 'The `/sale` endpoint provides the ability to get a list of transactions based on the `four part key`. When called directly, it will list all transactions specific to that four part key at the terminal level. If the detail property is set to `dba`, it will tell the endpoint to return all transactions at the DBA level, essentially using the first three parts of the four part key.'
+      parameters:
+        - name: detail
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+          example: dba
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: c43e15074c1cba0404647a9ad730604bb0c1f47c5c3a8d31441ac52d422be942
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_5'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "authamount": "127.99",
+                        "authorization": "016647",
+                        "authtrandategmt": "20-Jan-2021",
+                        "batchid": "180",
+                        "closeddate": "",
+                        "epxid/customer": "9001",
+                        "epxid/dba": "1",
+                        "epxid/merchant": "2630",
+                        "epxid/terminal": "1",
+                        "folionumber": "",
+                        "invoicenumber": "ABC-123",
+                        "markedtosettle": "N",
+                        "ordernumber": "",
+                        "referencenumber": "",
+                        "rentalnumber": "",
+                        "response": "00",
+                        "system/trantype": "CCR1",
+                        "tipamount": "0.00",
+                        "transaction": "123",
+                        "userdata/1": "Mobile Payment",
+                        "userdata/10": "",
+                        "userdata/2": "",
+                        "userdata/3": "Off Peak Measurement",
+                        "userdata/4": "",
+                        "userdata/5": "",
+                        "userdata/6": "",
+                        "userdata/7": "",
+                        "userdata/8": "",
+                        "userdata/9": "",
+                        "void": "N"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBME47VH6MZ9DWQ",
+                        "timestamp": "2021-01-20T09:09:24Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /ping:
+    get:
+      tags:
+        - Other
+      description: Performs a general ping into the IPS system to verify our system availability.
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 5d9fbb6e89ce4f2b07ec8789637fa9e4506fe83e673fb91fa61399b39482eb44
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": null,
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBNN9LFHD02WDDZ",
+                        "timestamp": "2021-01-20T09:31:53Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /batch/123 (Lookup):
+    get:
+      tags:
+        - Transaction Lookup
+      description: Retrieves deatils about a specific Batch beased on the Batch `Id`
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: a912f4b1e99070b948513f27db86844d25b4b2741ac2bae7bf0ad09969563ac4
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_6'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "batchID": "123",
+                        "payload1": "No Data Found",
+                        "response": "B1",
+                        "text": "BATCH NOT OPEN"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBNW3AT9JF8MDDX",
+                        "timestamp": "2021-01-20T09:25:47Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /sale/00DXDBMWJR6LNV9VDWY:
+    get:
+      tags:
+        - Transaction Lookup
+      description: The /sale endpoint provides the ability to get the details for a single transaction based on the BRIC (EPX Transaction Identifier) value.
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: e9572f52232654f27772d169119c2f754bdc220f9cc01833c2b55c51ded13980
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_5'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": {
+                        "authamount": "127.99",
+                        "authorization": "016647",
+                        "authtrandategmt": "20-Jan-2021",
+                        "batchid": "180",
+                        "closeddate": "",
+                        "epxid/customer": "9001",
+                        "epxid/dba": "1",
+                        "epxid/merchant": "2630",
+                        "epxid/terminal": "1",
+                        "folionumber": "",
+                        "invoicenumber": "ABC-123",
+                        "markedtosettle": "N",
+                        "ordernumber": "",
+                        "referencenumber": "",
+                        "rentalnumber": "",
+                        "response": "00",
+                        "system/trantype": "CCR1",
+                        "tipamount": "0.00",
+                        "transaction": "123",
+                        "userdata/1": "Mobile Payment",
+                        "userdata/10": "",
+                        "userdata/2": "",
+                        "userdata/3": "Off Peak Measurement",
+                        "userdata/4": "",
+                        "userdata/5": "",
+                        "userdata/6": "",
+                        "userdata/7": "",
+                        "userdata/8": "",
+                        "userdata/9": "",
+                        "void": "N"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBME47VH6MZ9DWQ",
+                        "timestamp": "2021-01-20T09:09:24Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /reverse/00DXDBNH34TYRJY8DDM:
+    get:
+      tags:
+        - Transaction Lookup
+      description: Retrieves details about a Reversal transaction.
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 53eef125818332b9a7a9e6a44cc7994d26e7dec9740d195d3bcd64c1d4f01f06
+      responses:
+        '200':
+          description: Request was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "data": null,
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBNJUBGM55J6DDY",
+                        "timestamp": "2021-01-20T09:30:04Z"
+                      }
+                    }
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /storage/00DXDBLJBH93L69EDW6:
+    post:
+      tags:
+        - Other
+      description: 'The Storage transaction presents the capability to create a new BRIC or update an existing one within the EPX system, without interaction with the card networks. This transaction type is available for both credit card (CC) and ACH.'
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: c4b163893ca194ca67f0a8735797324403caa2a3874266a5a2bfbe172d887adb
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_14'
+            examples:
+              '0':
+                value: |-
+                  {
+                    "account": "4111111111111111",
+                    "expirationDate": "1212"
+                  }
+      responses:
+        '200':
+          description: Request was successful
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+  /storage:
+    post:
+      tags:
+        - Other
+      description: 'The Storage transaction presents the capability to create a new BRIC or update an existing one within the EPX system, without interaction with the card networks. This transaction type is available for both credit card (CC) and ACH.'
+      parameters:
+        - name: EPI-Id
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 9001-2630-1-1
+        - name: EPI-Signature
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: f74fe0bf995ad1dd95ec8fadd64e880a33dc430517e7b498ce5c94874004b7d5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_15'
+            examples:
+              '0':
+                value: |-
+                  {
+                    "account": "4111111111111111",
+                    "expirationDate": "1212"
+                  }
+      responses:
+        '200':
+          description: Request was successful
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized - EPIKey is required.
+        '403':
+          description: Forbidden - EPIKey provided doesn’t have the right to perform the request.
+        '404':
+          description: Not Found - Requested resource was not found.
+        '405':
+          description: Method Not - Allowed HTTP method request is not allowed
+        '500':
+          description: Internal Server Error - Unexpected server error has occurred
+      servers:
+        - url: 'https://epi.epxuap.com'
+    servers:
+      - url: 'https://epi.epxuap.com'
+components:
+  schemas:
+    sale_userData:
+      type: object
+      properties:
+        '1':
+          type: string
+        '3':
+          type: string
+    sale_userdata:
+      type: object
+      properties:
+        '1':
+          type: string
+        '2':
+          type: string
+        '10':
+          type: string
+    sale_enhancedData:
+      type: object
+      properties:
+        '1':
+          type: string
+        '2':
+          type: string
+        '3':
+          type: string
+        '4':
+          type: string
+        '5':
+          type: string
+        '6':
+          type: string
+        '14':
+          type: string
+        '15':
+          type: string
+        '16':
+          type: string
+        '17':
+          type: string
+        '18':
+          type: string
+        '19':
+          type: string
+        '20':
+          type: string
+        '21':
+          type: string
+        '22':
+          type: string
+        '23':
+          type: string
+        line:
+          type: integer
+        dataType:
+          type: string
+    sale_special:
+      type: object
+      properties:
+        '2':
+          type: string
+        '4':
+          type: string
+    body:
+      type: object
+      x-examples:
+        example-1: {}
+      properties:
+        cvv2:
+          type: string
+          description: |-
+            The CVV2 field contains the credit card’s CVV2 number.
+            • Variable Type: Numeric
+            • Max Length: 4
+        lastName:
+          type: string
+        zipCode:
+          type: string
+        userData:
+          $ref: '#/components/schemas/sale_userData'
+        orderNumber:
+          type: string
+          description: |
+            The ORDER_NBR field is an optional field that will contain the order number of the customer
+            associated with the account number for the transaction.
+            • Variable Type: Alphanumeric
+            • Max Length: 25
+        city:
+          type: string
+        userdata:
+          $ref: '#/components/schemas/sale_userdata'
+        invoiceNumber:
+          type: string
+        cardEntryMethod:
+          type: string
+          description: |-
+            The CARD_ENT_METH field is used to indicate how the card number was entered for the
+            transaction.
+            • Variable Type: Alpha
+            • Max Length: 1
+
+            Card Entry Method Codes
+            • A—Used when scanning a Bar Code
+            • B—OCR
+            • D—Used when sending Swiped Track 2 data
+            • G—Chip (EMV contact)
+            • H—Used when sending Swiped Track 1 data
+            • M—Used when sending MICR data
+            • Q—Proximity / Contactless MSD non-EMV (Track 1 or Track 2 allowed)
+            • R—Proximity / Contactless EMV-based (Track 2 data is required)
+            • X—Key Entered MICR or Card Number (Typed in using keyboard or keypad)
+            • Z—BRIC/GUID Token Transaction
+            • 0—Used when sending Key Entered Card data from MagneSafe 1.x Reader
+            • 1—Used when sending Encrypted Track 1 data from MagneSafe 1.x Reader
+            • 2—Used when sending Encrypted Track 2 data from MagneSafe 1.x Reader
+            • 3—Used when sending Encrypted Track 1 and 2 data from MagneSafe 2.x Reader
+        state:
+          type: string
+        expirationDate:
+          type: string
+          description: |-
+            The EXP_DATE field contains the credit card’s expiration date.
+            • Variable Type: Numeric
+            • Format: YYMM
+            • Max Length: 4
+        rentalnumber:
+          type: string
+        amount:
+          type: number
+          description: |-
+            The AMOUNT field contains the positive dollar amount of funds to be moved during the
+            transaction. The AMOUNT should be the amount of goods and service including any
+            reference field amount; for example, TIP_AMT, TAX_AMT.
+            AMOUNT should not include any cashback or convenience fee/surcharge amounts. Any
+            cashback or convenience fee/surcharge amounts desired will be added into the amount
+            authorized and included in the AUTH_AMOUNT_REQUESTED tag.
+            • Variable Type: Numeric (Decimal Point Required)
+            • Format: N.NN
+            • Max Length: 13
+          default: 0
+          example: 0
+          minimum: 0.01
+          maximum: 99999999999.99
+        taxExempt:
+          type: boolean
+        address:
+          type: string
+        enhancedData:
+          type: array
+          items:
+            $ref: '#/components/schemas/sale_enhancedData'
+        referencenumber:
+          type: string
+        capture:
+          type: boolean
+        emvData:
+          type: string
+          description: |-
+            The EMV_Data tag contains the request data from the EMV kernel as a variable list of tags and
+            their data in TLV format.
+            • Variable Type: Alphanumeric
+            • Max Length: 510
+          example: '>9F34030200009F260828BF9D3AFCC8DD529F2701809F1008010103A0000000009F37044A BAA8C49F3602008595054040040000820258009F3303E0F8C89F1A0208409F3501229F1E0832323135 333731309F03060000000000009A031504309C01009F02060000000010005F2A0208409F090200025F 3401009F4104000000039F0607A0000000041010'
+        trackData:
+          type: string
+          description: |-
+            The TRACK_DATA field contains the track data from the credit or debit card. This field works
+            with the CARD_ENT_METH field and may be in clear text or encrypted based on the card
+            reader used during the transaction. When sending track data, track 1 is to be used when
+            processing a credit card transaction, and track 2 is to be used if track 1 is unavailable or when
+            processing a debit or EBT transaction.
+        special:
+          $ref: '#/components/schemas/sale_special'
+        firstName:
+          type: string
+        taxAmount:
+          type: number
+        account:
+          type: string
+          description: |-
+            The ACCOUNT_NBR field contains the account number to be acted upon during the
+            transaction.
+            • Variable Type: Alphanumeric
+            • Max Length: 30
+          example: '4111111111111111'
+        transaction:
+          type: integer
+        system/tranType:
+          type: string
+      required:
+        - expirationDate
+        - amount
+        - emvData
+        - trackData
+        - account
+    inline_response_200:
+      type: object
+      properties:
+        reference:
+          type: object
+          properties:
+            bric:
+              type: string
+            timestamp:
+              type: string
+        data:
+          type: object
+          properties:
+            authorization:
+              type: string
+            response:
+              type: string
+            text:
+              type: string
+        errors: {}
+    body_1:
+      type: object
+      properties:
+        amount:
+          type: number
+        capture:
+          type: boolean
+        account:
+          type: string
+        transaction:
+          type: integer
+    body_2:
+      type: object
+      properties:
+        amount:
+          type: number
+    body_3:
+      type: object
+      properties:
+        amount:
+          type: number
+        transaction:
+          type: integer
+    ach_address:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+    body_4:
+      type: object
+      properties:
+        routingNumber:
+          type: integer
+        amount:
+          type: number
+        address:
+          $ref: '#/components/schemas/ach_address'
+        account:
+          type: string
+        transaction:
+          type: integer
+    inline_response_200_1:
+      type: object
+      properties:
+        reference:
+          type: object
+          properties:
+            bric:
+              type: string
+            timestamp:
+              type: string
+        data: {}
+        errors:
+          type: array
+          items:
+            type: string
+    body_5:
+      type: object
+      properties:
+        amount:
+          type: number
+        transaction:
+          type: integer
+    inline_response_200_2:
+      type: object
+      properties:
+        reference:
+          type: object
+          properties:
+            bric:
+              type: string
+            timestamp:
+              type: string
+        data:
+          type: object
+          properties:
+            response:
+              type: string
+            text:
+              type: string
+        errors: {}
+    body_6:
+      type: object
+      properties:
+        amount:
+          type: number
+        account:
+          type: string
+        transaction:
+          type: integer
+    body_7:
+      type: object
+      properties:
+        amount:
+          type: number
+        account:
+          type: string
+        transaction:
+          type: integer
+    body_8:
+      type: object
+      properties:
+        amount:
+          type: number
+        transaction:
+          type: integer
+    body_9:
+      type: object
+      properties:
+        amount:
+          type: integer
+        transaction:
+          type: integer
+    inline_response_200_3:
+      type: object
+      properties:
+        reference:
+          type: object
+          properties:
+            bric:
+              type: string
+            timestamp:
+              type: string
+        data:
+          type: object
+          properties:
+            authorization:
+              type: string
+            response:
+              type: string
+            text:
+              type: string
+            authTotalAuthorized:
+              type: string
+        errors: {}
+    body_10:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        zipCode:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        account:
+          type: string
+        transaction:
+          type: integer
+        expirationDate:
+          type: string
+    body_11:
+      type: object
+      properties:
+        amount:
+          type: number
+        tipAmount:
+          type: number
+    body_12:
+      type: object
+      properties:
+        batchId:
+          type: string
+        transaction:
+          type: integer
+    body_13:
+      type: object
+      properties:
+        transaction:
+          type: integer
+    inline_response_200_4:
+      type: object
+      properties:
+        reference:
+          type: object
+          properties:
+            bric:
+              type: string
+            timestamp:
+              type: string
+        data: {}
+        errors: {}
+    inline_response_200_5:
+      type: object
+      properties:
+        reference:
+          type: object
+          properties:
+            bric:
+              type: string
+            timestamp:
+              type: string
+        data:
+          type: object
+          properties:
+            userdata/7:
+              type: string
+            userdata/6:
+              type: string
+            userdata/9:
+              type: string
+            userdata/8:
+              type: string
+            closeddate:
+              type: string
+            userdata/3:
+              type: string
+            userdata/2:
+              type: string
+            userdata/5:
+              type: string
+            userdata/4:
+              type: string
+            userdata/1:
+              type: string
+            epxid/customer:
+              type: string
+            authorization:
+              type: string
+            ordernumber:
+              type: string
+            epxid/terminal:
+              type: string
+            invoicenumber:
+              type: string
+            rentalnumber:
+              type: string
+            tipamount:
+              type: string
+            void:
+              type: string
+            authamount:
+              type: string
+            epxid/merchant:
+              type: string
+            epxid/dba:
+              type: string
+            markedtosettle:
+              type: string
+            referencenumber:
+              type: string
+            batchid:
+              type: string
+            folionumber:
+              type: string
+            system/trantype:
+              type: string
+            userdata/10:
+              type: string
+            response:
+              type: string
+            authtrandategmt:
+              type: string
+            transaction:
+              type: string
+        errors: {}
+    inline_response_200_6:
+      type: object
+      properties:
+        reference:
+          type: object
+          properties:
+            bric:
+              type: string
+            timestamp:
+              type: string
+        data:
+          type: object
+          properties:
+            payload1:
+              type: string
+            response:
+              type: string
+            text:
+              type: string
+            batchID:
+              type: string
+        errors: {}
+    body_14:
+      type: object
+      properties:
+        account:
+          type: string
+        expirationDate:
+          type: string
+    body_15:
+      type: object
+      properties:
+        account:
+          type: string
+        expirationDate:
+          type: string
