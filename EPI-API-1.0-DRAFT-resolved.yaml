@@ -173,61 +173,15 @@ paths:
                       }
                     }
                 '1':
-                  value: |-
-                    {
-                      "data": {
-                        "authorization": "016522",
-                        "response": "00",
-                        "text": "APPROVAL 016522"
-                      },
-                      "errors": null,
-                      "reference": {
-                        "bric": "00DXDBWMHKY8GR8AD76",
-                        "timestamp": "2021-01-20T06:19:15Z"
-                      }
-                    }
-                '2':
-                  value: |-
-                    {
-                      "data": {
-                        "authorization": "016523",
-                        "response": "00",
-                        "text": "APPROVAL 016523"
-                      },
-                      "errors": null,
-                      "reference": {
-                        "bric": "00DXDBWY6U3RMGHWD78",
-                        "timestamp": "2021-01-20T06:20:09Z"
-                      }
-                    }
-                '3':
-                  value: |-
-                    {
-                      "data": {
-                        "authorization": "016532",
-                        "response": "00",
-                        "text": "APPROVAL 016532"
-                      },
-                      "errors": null,
-                      "reference": {
-                        "bric": "00DXDBD29K4713FQD7E",
-                        "timestamp": "2021-01-20T06:25:40Z"
-                      }
-                    }
-                '4':
-                  value: |-
-                    {
-                      "data": {
-                        "authorization": "016682",
-                        "response": "00",
-                        "text": "APPROVAL 016682"
-                      },
-                      "errors": null,
-                      "reference": {
-                        "bric": "00DXDBPV3A0Q5UEXDF9",
-                        "timestamp": "2021-01-20T10:11:06Z"
-                      }
-                    }
+                  value:
+                    data:
+                      authorization: null
+                      response: '05'
+                      text: DECLINED
+                    errors: null
+                    reference:
+                      bric: 00DXDBWMHKY8GR8AD76
+                      timestamp: '2021-01-20T06:19:15Z'
         '400':
           description: Bad request.
         '401':
@@ -1261,6 +1215,11 @@ paths:
           schema:
             type: string
           example: 2864c6a874625db8703e1ec2f430f5df6d7ed9090f861c0d54dec3b7d984367d
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+          description: application/json
       requestBody:
         content:
           application/json:
