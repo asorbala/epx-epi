@@ -1,0 +1,2895 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Custom Pay API",
+    "description": "The Custom Pay API uses Representational State Transfer (REST) to describe and standardize access to the EPX Payment Interface (EPI). The use of transport layer security (TLS) is enforced on all requests. All requests and responses will be in JSON (JavaScript Object Notation).",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://epi.epxuap.com"
+    }
+  ],
+  "paths": {
+    "/sale": {
+      "post": {
+        "tags": [
+          "sales"
+        ],
+        "description": "This endpoint authorizes and captures funds within the same transaction, provided the authorization portion is approved and is otherwise able to settle. When an auth and capture transaction is run against an account number, the authorization occurs for the dollar amount of the transaction. Immediately after, the capture automatically occurs so that it will settle during the next settlement window.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body"
+              },
+              "examples": {
+                "Request with TransactionID": {
+                  "value": {
+                    "account": "4111111111111111",
+                    "amount": 127.99,
+                    "transaction": 123,
+                    "expirationDate": "1212",
+                    "trackData": "4111111111111111=49121010000000000000?",
+                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101"
+                  }
+                },
+                "Minimal Request": {
+                  "value": {
+                    "amount": 127.99,
+                    "account": "4111111111111111",
+                    "expirationDate": "1212",
+                    "trackData": "4111111111111111=49121010000000000000?",
+                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101"
+                  }
+                },
+                "Request with Invoice and Entry Method": {
+                  "value": {
+                    "trackData": "4111111111111111=49121010000000000000?",
+                    "amount": 10,
+                    "transaction": 123,
+                    "invoiceNumber": "ABC-123",
+                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101",
+                    "cardEntryMethod": "G",
+                    "expirationDate": "1212",
+                    "account": "4111111111111111"
+                  }
+                },
+                "Request with Tax and Enhanced Data": {
+                  "value": {
+                    "account": "4111111111111111",
+                    "amount": 127.99,
+                    "transaction": 123,
+                    "taxAmount": 7.99,
+                    "taxExempt": "Y",
+                    "invoiceNumber": "ABC-123",
+                    "expirationDate": "1212",
+                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101",
+                    "trackData": "4111111111111111=49121010000000000000?",
+                    "enhancedData": [
+                      {
+                        "1": "123 Customer Street",
+                        "2": "7.99",
+                        "3": "1",
+                        "4": "0.00",
+                        "5": "0.00",
+                        "6": "0.00",
+                        "14": "8725",
+                        "15": "Power Usage",
+                        "16": "Utility Bill",
+                        "17": "123",
+                        "18": "KWH",
+                        "19": "0.08",
+                        "20": "0.00",
+                        "21": "0.00",
+                        "22": "0.00",
+                        "23": "120.00",
+                        "dataType": "G",
+                        "line": "1"
+                      },
+                      {
+                        "1": "123 Main Street",
+                        "2": "7.99",
+                        "3": "1",
+                        "4": "0.00",
+                        "5": "0.00",
+                        "6": "0.00",
+                        "14": "8725",
+                        "15": "Power Usage",
+                        "16": "Utility Bill",
+                        "17": "123",
+                        "18": "KWH",
+                        "19": "0.08",
+                        "20": "0.00",
+                        "21": "0.00",
+                        "22": "0.00",
+                        "23": "20.00",
+                        "dataType": "G",
+                        "line": "2"
+                      }
+                    ],
+                    "userData": {
+                      "1": "Mobile Payment",
+                      "3": "Off Peak Measurement"
+                    },
+                    "special": {
+                      "2": "soloar",
+                      "4": "regen"
+                    }
+                  }
+                },
+                "Request for Authorization Only": {
+                  "value": {
+                    "account": "4111111111111111",
+                    "amount": 127.99,
+                    "capture": false,
+                    "transaction": 123,
+                    "expirationDate": "1212",
+                    "trackData": "4111111111111111=49121010000000000000?",
+                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101"
+                  }
+                },
+                "Request with Additional Data": {
+                  "value": {
+                    "amount": 12.99,
+                    "account": "4111111111111111",
+                    "expirationDate": "2211",
+                    "trackData": "4111111111111111=49121010000000000000?",
+                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101",
+                    "cvv2": 123,
+                    "invoiceNumber": "ABC-123",
+                    "orderNumber": "ABC-123",
+                    "transaction": 123,
+                    "firstName": "Joe",
+                    "lastName": "Doe",
+                    "address": "123 Main Street",
+                    "city": "City",
+                    "state": "CA",
+                    "zipCode": "12345",
+                    "cardEntryMethod": "X",
+                    "system/tranType": "CCR1",
+                    "userdata": {
+                      "1": "ABC-123",
+                      "2": "ABC-123",
+                      "10": "ABC-123"
+                    },
+                    "referencenumber": "ABC-123",
+                    "rentalnumber": "ABC-123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "data": {
+                        "authorization": "016518",
+                        "response": "00",
+                        "text": "APPROVAL 016518"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBWHB6WA5HJ3D71",
+                        "timestamp": "2021-01-20T06:16:24Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "Auth and Capture"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ],
+      "get": {
+        "tags": [
+          "lookups"
+        ],
+        "summary": "Transaction List",
+        "operationId": "get-sale",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "description": "This endpoint retrieves a list of transactions based on the merchant's four part key, which is set during onboarding. When called directly, the endpoint will list all transactions specific to that four part key at the terminal level. If the detail property is set to DBA, it will tell the endpoint to return all transactions at the DBA level, essentially using the first three parts of the four part key.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          }
+        ]
+      }
+    },
+    "/refund/[bric]": {
+      "post": {
+        "tags": [
+          "refunds"
+        ],
+        "description": "This endpoint uses a BRIC token (EPX Transaction Identifier) associated with a previous sale to return funds to an account. A single refund for the full amount of the original transaction, or numerous partial refunds can be performed with dollar amounts less than and not exceeding the total amount of the original sale.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bric"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_3"
+              },
+              "examples": {
+                "Valid Request": {
+                  "value": {
+                    "amount": 127.99,
+                    "transaction": 123
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "data": {
+                        "authorization": "709414",
+                        "response": "00",
+                        "text": "APPROVAL 709414"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBDNZD1959FYD7U",
+                        "timestamp": "2021-01-20T06:37:28Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "Refund by BRIC"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ],
+      "get": {
+        "tags": [
+          "lookups"
+        ],
+        "summary": "Refund Details by BRIC",
+        "operationId": "get-refund-[bric]",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "This endpoint retrieves details of a specific refund based on the BRIC token (EPX Transaction Identifier) of the refund.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          },
+          {
+            "$ref": "#/components/parameters/bric"
+          }
+        ]
+      }
+    },
+    "/ach": {
+      "post": {
+        "tags": [
+          "sales"
+        ],
+        "description": "Automated Clearing House (ACH) transactions withdraw funds directly from a checking or savings account.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_4"
+              },
+              "examples": {
+                "Valid Request": {
+                  "value": {
+                    "account": "4111111111111111",
+                    "routingNumber": 123456789,
+                    "amount": 127.99,
+                    "transaction": 123,
+                    "address": {
+                      "firstName": "Galileo",
+                      "lastName": "Galilei"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "data": {
+                        "authorization": "709414",
+                        "response": "00",
+                        "text": "APPROVAL 709414"
+                      },
+                      "errors": {},
+                      "reference": {
+                        "bric": "00DXDBNZ73A0J5UUDDV",
+                        "timestamp": "2021-01-20T09:34:35Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "ACH Sale"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ]
+    },
+    "/sale/capture": {
+      "post": {
+        "tags": [
+          "sales"
+        ],
+        "description": "This endpoint captures the previous pre-authorization. A capture can be performed on the amount equal to or less than the dollar amount of the referenced pre-authorization. This endpoint queries the transaction database to identify an auth.\n",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          },
+          {
+            "schema": {
+              "type": "boolean",
+              "default": true
+            },
+            "in": "header",
+            "name": "capture",
+            "description": "When set to true, an authorization and capture will be performed. When set to false, only an authorization will be performed.",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_6"
+              },
+              "examples": {
+                "Valid Request": {
+                  "value": {
+                    "account": "4111111111111111",
+                    "amount": 127.99,
+                    "transaction": 123
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_2"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "data": {
+                        "response": "S8",
+                        "text": "NO AUTHORIZATION"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBFX2PVND9Q7D9A",
+                        "timestamp": "2021-01-20T07:09:14Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "Capture"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ],
+      "parameters": []
+    },
+    "/refund": {
+      "post": {
+        "tags": [
+          "refunds"
+        ],
+        "description": "This endpoint returns funds for a previously captured transaction. A single refund for the full amount of the original transaction, or numerous partial refunds can be performed with dollar amounts less than and not exceeding the total amount of the original capture being acted upon.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_7"
+              },
+              "examples": {
+                "Valid Request": {
+                  "value": {
+                    "account": "4111111111111111",
+                    "amount": 127.99,
+                    "transaction": 123
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "data": {
+                        "authorization": "095573",
+                        "response": "00",
+                        "text": "APPROVAL 095573"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBDPWZRN91NND7V",
+                        "timestamp": "2021-01-20T06:38:17Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "Refund"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ]
+    },
+    "/batch": {
+      "put": {
+        "tags": [
+          "sales"
+        ],
+        "description": "This endpoint closes all captured transactions.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request was successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "data": {
+                        "response": "00",
+                        "text": "APPROVAL"
+                      },
+                      "errors": {},
+                      "reference": {
+                        "bric": "00DXDBE7QZH4MDT2D8B",
+                        "timestamp": "2021-01-20T06:46:10Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "Batch Close"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ],
+      "parameters": []
+    },
+    "/void/[bric]": {
+      "put": {
+        "tags": [
+          "refunds"
+        ],
+        "description": "This endpoint will stop an authorization, sale, capture, or refund transaction prior to settlement. If the transaction has already been settled, this function will no longer be available.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          },
+          {
+            "$ref": "#/components/parameters/bric"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_2"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "data": {
+                        "response": "00",
+                        "text": "APPROVAL"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBE4D4BFF3JHD88",
+                        "timestamp": "2021-01-20T06:44:17Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "Void an authorization"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ],
+      "parameters": []
+    },
+    "/sale/capture/[bric]": {
+      "post": {
+        "tags": [
+          "sales"
+        ],
+        "description": "This endpoint captures a previous pre-authorization by its BRIC token. A capture can be performed on the amount equal to or less than the dollar amount of the referenced pre-authorization.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          },
+          {
+            "$ref": "#/components/parameters/bric"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_8"
+              },
+              "examples": {
+                "Valid Request": {
+                  "value": {
+                    "amount": 127.99,
+                    "transaction": 123
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "data": {
+                        "authorization": "797956",
+                        "response": "00",
+                        "text": "APPROVAL 797956"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBXA5UE4FNNTDAJ",
+                        "timestamp": "2021-01-20T07:57:21Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "Capture by BRIC"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/bric"
+        }
+      ]
+    },
+    "/sale/inc/[bric]": {
+      "put": {
+        "tags": [
+          "sales"
+        ],
+        "description": "This endpoint adds a specific amount of money to a transaction, or incrementally authorizes a new amount. The original transaction BRIC (EPX Transaction Identifier) is required. The amount in the response example is the additional amount needed. For example, if the initial authorization was $20 and the new amount needs to be $30, the json payload would show an Amount of 10.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          },
+          {
+            "$ref": "#/components/parameters/bric"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_9"
+              },
+              "examples": {
+                "Valid Request": {
+                  "value": {
+                    "amount": 10,
+                    "transaction": 123
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_3"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "data": {
+                        "authTotalAuthorized": "137.99",
+                        "authorization": "016554",
+                        "response": "00",
+                        "text": "APPROVAL 016554"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBEP5655Z30QD8Y",
+                        "timestamp": "2021-01-20T06:55:37Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "Incremental Authorization"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/bric"
+        }
+      ]
+    },
+    "/avs": {
+      "post": {
+        "tags": [
+          "sales"
+        ],
+        "description": "This endpoint performs transactions using the Address Verification System (AVS), which verifies the customer’s address to help prevent fraud.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_10"
+              },
+              "examples": {
+                "Valid Request": {
+                  "value": {
+                    "account": "4111111111111111",
+                    "expirationDate": "2211",
+                    "transaction": 123,
+                    "firstName": "Joe",
+                    "lastName": "Doe",
+                    "address": "123 Main Street",
+                    "city": "City",
+                    "state": "CA",
+                    "zipCode": "12345"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request was successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "data": {
+                        "authorization": "016639",
+                        "response": "00",
+                        "text": "APPROVAL 016639"
+                      },
+                      "errors": {},
+                      "reference": {
+                        "bric": "00DXDBLJBH93L69EDW6",
+                        "timestamp": "2021-01-20T08:54:47Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "AVS Sale"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ]
+    },
+    "/sale/[bric]": {
+      "post": {
+        "tags": [
+          "sales"
+        ],
+        "description": "This endpoint edits an open Authorization and Capture transaction. The requests requires the trasnaction's BRIC (EPX Transaction Identifier) and can only be performed on an approved transaction that has not been voided, closed, or settled.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          },
+          {
+            "$ref": "#/components/parameters/bric"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_11"
+              },
+              "examples": {
+                "Valid Request": {
+                  "value": {
+                    "amount": 131.99,
+                    "tipAmount": 5.55
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "data": {
+                        "authorization": "016542",
+                        "response": "00",
+                        "text": "APPROVAL 016542"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBE0DBFALZL8D86",
+                        "timestamp": "2021-01-20T06:42:06Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "Tip Adjust"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ],
+      "get": {
+        "tags": [
+          "lookups"
+        ],
+        "summary": "Transaction Details by BRIC",
+        "operationId": "get-sale-bric",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "description": "This endpoint retrieves the details for a single transaction based on the BRIC (EPX Transaction Identifier) value.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          },
+          {
+            "$ref": "#/components/parameters/bric"
+          }
+        ]
+      }
+    },
+    "/reverse/[bric]": {
+      "post": {
+        "tags": [
+          "refunds"
+        ],
+        "description": "This endpoint reverses the authorization of funds on a credit card. This will release the funds that are being held at the issuing bank.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bric"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_12"
+              },
+              "examples": {
+                "Valid Request": {
+                  "value": {
+                    "batchId": 123,
+                    "transaction": 123
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "data": {
+                        "authorization": "016658",
+                        "response": "00",
+                        "text": "APPROVAL 016658"
+                      },
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBNH34TYRJY8DDM",
+                        "timestamp": "2021-01-20T09:28:30Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "Auth Reversal by BRIC"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ],
+      "get": {
+        "tags": [
+          "lookups"
+        ],
+        "summary": "Auth Reversal Details",
+        "operationId": "get-reverse-00DXDBND3KARE18UDDJ",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "description": "Retrieves details about a reversed authorization.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          },
+          {
+            "$ref": "#/components/parameters/bric"
+          }
+        ]
+      }
+    },
+    "/ping": {
+      "get": {
+        "tags": [
+          "miscellaneous"
+        ],
+        "description": "This endpoint performs a general ping into the IPS system to verify our system availability.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_4"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "data": null,
+                      "errors": null,
+                      "reference": {
+                        "bric": "00DXDBNN9LFHD02WDDZ",
+                        "timestamp": "2021-01-20T09:31:53Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "System Availability Check"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ]
+    },
+    "/storage/[bric]": {
+      "post": {
+        "tags": [
+          "miscellaneous"
+        ],
+        "description": "This endpoint creates a new transaction BRIC (EPX Transaction Identifier) or updates an existing one within the EPX system, without interaction with the card networks. This transaction type is available for both credit card and ACH.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          },
+          {
+            "$ref": "#/components/parameters/bric"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_14"
+              },
+              "examples": {
+                "Valid Request": {
+                  "value": {
+                    "account": "4111111111111111",
+                    "expirationDate": "1212"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "Update BRIC"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/bric"
+        }
+      ]
+    },
+    "/storage": {
+      "post": {
+        "tags": [
+          "miscellaneous"
+        ],
+        "description": "The Storage transaction presents the capability to create a new BRIC or update an existing one within the EPX system, without interaction with the card networks. This transaction type is available for both credit card (CC) and ACH.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_15"
+              },
+              "examples": {
+                "Valid Request": {
+                  "value": {
+                    "account": "4111111111111111",
+                    "expirationDate": "1212"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://epi.epxuap.com"
+          }
+        ],
+        "summary": "Create BRIC"
+      },
+      "servers": [
+        {
+          "url": "https://epi.epxuap.com"
+        }
+      ]
+    },
+    "/batch/[transaction]": {
+      "post": {
+        "summary": "Batch Close by Transaction",
+        "operationId": "post-batch-[transactionId]",
+        "description": "This endpoint closes a selected number of transactions based on transaction IDs provided.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "parameters": [],
+      "get": {
+        "tags": [
+          "lookups"
+        ],
+        "summary": "Batch Details by Transaction",
+        "operationId": "get-batch-[transactionId]",
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized: EPI-Id is required"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Requested resource was not found"
+          },
+          "405": {
+            "description": "HTTP method is not allowed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "description": "This endpoint retrieves deatils about a specific batch based on the Batch ID.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          },
+          {
+            "$ref": "#/components/parameters/transaction"
+          }
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "sales",
+      "description": "This section includes credit card payment authorization, capture, and ACH endpoints"
+    },
+    {
+      "name": "refunds",
+      "description": "This section includes void, refund, and reversal endpoints"
+    },
+    {
+      "name": "lookups"
+    },
+    {
+      "name": "miscellaneous"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "sale_userData": {
+        "type": "object",
+        "description": "userData is custom data that can be sent with a transaction, such as transaction details. This information will be returned. Up to 10 fields of userData can be added.",
+        "properties": {
+          "1": {
+            "type": "string",
+            "maxLength": 80
+          }
+        }
+      },
+      "sale_userdata": {
+        "type": "object",
+        "description": "userData is custom data that can be sent with a transaction, such as transaction details. This information will be returned. Up to 10 fields of userData can be added.",
+        "properties": {
+          "1": {
+            "type": "string",
+            "maxLength": 80
+          }
+        }
+      },
+      "sale_enhancedData": {
+        "type": "object",
+        "description": "PCI Level II & III data can be passed via enhanced data fields. For more information about enhanced data, refer to the Custom Pay API Supplemental Resources on the Files page of this portal.",
+        "properties": {
+          "1": {
+            "type": "string"
+          },
+          "line": {
+            "type": "string",
+            "example": "1"
+          },
+          "dataType": {
+            "type": "string",
+            "example": "g"
+          }
+        }
+      },
+      "sale_special": {
+        "type": "object",
+        "properties": {
+          "2": {
+            "type": "string"
+          },
+          "4": {
+            "type": "string"
+          }
+        }
+      },
+      "body": {
+        "type": "object",
+        "x-examples": {
+          "example-1": {}
+        },
+        "properties": {
+          "cvv2": {
+            "$ref": "#/components/schemas/cvv2"
+          },
+          "lastName": {
+            "$ref": "#/components/schemas/lastName"
+          },
+          "zipCode": {
+            "$ref": "#/components/schemas/zipCode"
+          },
+          "userData": {
+            "$ref": "#/components/schemas/sale_userData"
+          },
+          "orderNumber": {
+            "$ref": "#/components/schemas/orderNumber"
+          },
+          "city": {
+            "$ref": "#/components/schemas/city"
+          },
+          "userdata": {
+            "$ref": "#/components/schemas/sale_userdata"
+          },
+          "invoiceNumber": {
+            "$ref": "#/components/schemas/invoiceNumber"
+          },
+          "cardEntryMethod": {
+            "$ref": "#/components/schemas/cardEntryMethod"
+          },
+          "state": {
+            "$ref": "#/components/schemas/state"
+          },
+          "expirationDate": {
+            "$ref": "#/components/schemas/expirationDate"
+          },
+          "rentalnumber": {
+            "$ref": "#/components/schemas/rentalNumber"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/amount"
+          },
+          "taxExempt": {
+            "$ref": "#/components/schemas/taxExempt"
+          },
+          "address": {
+            "$ref": "#/components/schemas/address"
+          },
+          "enhancedData": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/sale_enhancedData"
+            }
+          },
+          "referencenumber": {
+            "$ref": "#/components/schemas/referencenumber"
+          },
+          "capture": {
+            "$ref": "#/components/schemas/capture"
+          },
+          "emvData": {
+            "$ref": "#/components/schemas/emvData"
+          },
+          "trackData": {
+            "type": "string",
+            "description": "Track data from the credit or debit card. This field works with the CARD_ENT_METH field and may be in clear text or encrypted based on the card\nreader used during the transaction. When sending track data, track 1 is to be used when\nprocessing a credit card transaction, and track 2 is to be used if track 1 is unavailable or when\nprocessing a debit or EBT transaction.  In some cases, coding environments will perform a URL post of data to EPX. In these cases Track Data may contain special characters, like ‘%’, ‘+’, or ‘=’, that may need to be URL Encoded so that they are communicated correctly",
+            "maxLength": 256,
+            "example": "B4111111111111111^CARD/TEST^10121010000012345678"
+          },
+          "special": {
+            "$ref": "#/components/schemas/sale_special"
+          },
+          "firstName": {
+            "$ref": "#/components/schemas/firstName"
+          },
+          "taxAmount": {
+            "$ref": "#/components/schemas/taxAmount"
+          },
+          "account": {
+            "$ref": "#/components/schemas/account"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/transaction"
+          },
+          "system/tranType": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "expirationDate",
+          "amount",
+          "emvData",
+          "trackData",
+          "account"
+        ]
+      },
+      "inline_response_200": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "object",
+            "properties": {
+              "bric": {
+                "type": "string"
+              },
+              "timestamp": {
+                "type": "string"
+              }
+            }
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "authorization": {
+                "type": "string"
+              },
+              "response": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            }
+          },
+          "errors": {}
+        }
+      },
+      "body_1": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/amount"
+          },
+          "capture": {
+            "$ref": "#/components/schemas/capture"
+          },
+          "account": {
+            "$ref": "#/components/schemas/account"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/transaction"
+          }
+        }
+      },
+      "body_2": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/amount"
+          }
+        }
+      },
+      "body_3": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/amount"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/transaction"
+          }
+        }
+      },
+      "ach_address": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "example": "\"John\"",
+            "description": "Person's first name"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "\"Jones\"",
+            "description": "Person's last name"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName"
+        ]
+      },
+      "body_4": {
+        "type": "object",
+        "properties": {
+          "routingNumber": {
+            "$ref": "#/components/schemas/routingNumber"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/amount"
+          },
+          "address": {
+            "$ref": "#/components/schemas/ach_address"
+          },
+          "account": {
+            "$ref": "#/components/schemas/account"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/transaction"
+          }
+        },
+        "required": [
+          "routingNumber",
+          "amount",
+          "address",
+          "account",
+          "transaction"
+        ]
+      },
+      "inline_response_200_1": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "object",
+            "description": "Data that can be used to identify the transaction",
+            "properties": {
+              "bric": {
+                "type": "string",
+                "example": "\"00DGZ9BTJB05MDGU002\"",
+                "description": "Token generated for each financial transaction"
+              },
+              "timestamp": {
+                "type": "string",
+                "example": "\"2019-05-21T19:38:02Z\"",
+                "description": "Time of transaction processing"
+              }
+            }
+          },
+          "data": {
+            "description": "Data provided related to the request. Properties returned vary by request",
+            "type": "object",
+            "properties": {
+              "authorization": {
+                "type": "string",
+                "example": "009835",
+                "description": "Auth code corresponding to the transaction"
+              },
+              "response": {
+                "type": "string",
+                "example": "00",
+                "minLength": 2,
+                "maxLength": 2,
+                "description": "A successful response always returns 00"
+              },
+              "text": {
+                "type": "string",
+                "example": "APPROVAL 009835",
+                "description": "Text varies by response"
+              }
+            }
+          },
+          "errors": {
+            "type": "object",
+            "description": "Error codes and descriptions",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "example": 404,
+                "description": "HTTP error response code"
+              },
+              "text": {
+                "type": "string",
+                "example": "Requested resource was not found",
+                "description": "Description of the error"
+              }
+            }
+          }
+        }
+      },
+      "body_5": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/amount"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/transaction"
+          }
+        }
+      },
+      "inline_response_200_2": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "object",
+            "properties": {
+              "bric": {
+                "type": "string"
+              },
+              "timestamp": {
+                "type": "string"
+              }
+            }
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "response": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            }
+          },
+          "errors": {}
+        }
+      },
+      "body_6": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/amount"
+          },
+          "account": {
+            "$ref": "#/components/schemas/account"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/transaction"
+          }
+        }
+      },
+      "body_7": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/amount"
+          },
+          "account": {
+            "$ref": "#/components/schemas/account"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/transaction"
+          }
+        }
+      },
+      "body_8": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/amount"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/transaction"
+          }
+        }
+      },
+      "body_9": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/amount"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/transaction"
+          }
+        }
+      },
+      "inline_response_200_3": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "object",
+            "properties": {
+              "bric": {
+                "type": "string"
+              },
+              "timestamp": {
+                "type": "string"
+              }
+            }
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "authorization": {
+                "type": "string"
+              },
+              "response": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "authTotalAuthorized": {
+                "type": "string"
+              }
+            }
+          },
+          "errors": {}
+        }
+      },
+      "body_10": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "$ref": "#/components/schemas/firstName"
+          },
+          "lastName": {
+            "$ref": "#/components/schemas/lastName"
+          },
+          "zipCode": {
+            "$ref": "#/components/schemas/zipCode"
+          },
+          "address": {
+            "$ref": "#/components/schemas/address"
+          },
+          "city": {
+            "$ref": "#/components/schemas/city"
+          },
+          "state": {
+            "$ref": "#/components/schemas/state"
+          },
+          "account": {
+            "$ref": "#/components/schemas/account"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/transaction"
+          },
+          "expirationDate": {
+            "$ref": "#/components/schemas/expirationDate"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "zipCode",
+          "address",
+          "city",
+          "state",
+          "account",
+          "transaction"
+        ]
+      },
+      "body_11": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/amount"
+          },
+          "tipAmount": {
+            "$ref": "#/components/schemas/tipAmount"
+          }
+        }
+      },
+      "body_12": {
+        "type": "object",
+        "properties": {
+          "batchId": {
+            "$ref": "#/components/schemas/batchId"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/transaction"
+          }
+        }
+      },
+      "body_13": {
+        "type": "object",
+        "properties": {
+          "transaction": {
+            "$ref": "#/components/schemas/transaction"
+          }
+        }
+      },
+      "inline_response_200_4": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "object",
+            "properties": {
+              "bric": {
+                "type": "string"
+              },
+              "timestamp": {
+                "type": "string"
+              }
+            }
+          },
+          "data": {},
+          "errors": {}
+        }
+      },
+      "inline_response_200_5": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "object",
+            "properties": {
+              "bric": {
+                "type": "string"
+              },
+              "timestamp": {
+                "type": "string"
+              }
+            }
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "userdata/7": {
+                "type": "string"
+              },
+              "userdata/6": {
+                "type": "string"
+              },
+              "userdata/9": {
+                "type": "string"
+              },
+              "userdata/8": {
+                "type": "string"
+              },
+              "closeddate": {
+                "type": "string"
+              },
+              "userdata/3": {
+                "type": "string"
+              },
+              "userdata/2": {
+                "type": "string"
+              },
+              "userdata/5": {
+                "type": "string"
+              },
+              "userdata/4": {
+                "type": "string"
+              },
+              "userdata/1": {
+                "type": "string"
+              },
+              "epxid/customer": {
+                "type": "string"
+              },
+              "authorization": {
+                "type": "string"
+              },
+              "ordernumber": {
+                "type": "string"
+              },
+              "epxid/terminal": {
+                "type": "string"
+              },
+              "invoicenumber": {
+                "type": "string"
+              },
+              "rentalnumber": {
+                "type": "string"
+              },
+              "tipamount": {
+                "type": "string"
+              },
+              "void": {
+                "type": "string"
+              },
+              "authamount": {
+                "type": "string"
+              },
+              "epxid/merchant": {
+                "type": "string"
+              },
+              "epxid/dba": {
+                "type": "string"
+              },
+              "markedtosettle": {
+                "type": "string"
+              },
+              "referencenumber": {
+                "type": "string"
+              },
+              "batchid": {
+                "type": "string"
+              },
+              "folionumber": {
+                "type": "string"
+              },
+              "system/trantype": {
+                "type": "string"
+              },
+              "userdata/10": {
+                "type": "string"
+              },
+              "response": {
+                "type": "string"
+              },
+              "authtrandategmt": {
+                "type": "string"
+              },
+              "transaction": {
+                "type": "string"
+              }
+            }
+          },
+          "errors": {}
+        }
+      },
+      "inline_response_200_6": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "object",
+            "properties": {
+              "bric": {
+                "type": "string"
+              },
+              "timestamp": {
+                "type": "string"
+              }
+            }
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "payload1": {
+                "type": "string"
+              },
+              "response": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "batchID": {
+                "type": "string"
+              }
+            }
+          },
+          "errors": {}
+        }
+      },
+      "body_14": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "$ref": "#/components/schemas/account"
+          },
+          "expirationDate": {
+            "$ref": "#/components/schemas/expirationDate"
+          }
+        }
+      },
+      "body_15": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "$ref": "#/components/schemas/account"
+          },
+          "expirationDate": {
+            "$ref": "#/components/schemas/expirationDate"
+          }
+        }
+      },
+      "routingNumber": {
+        "type": "number",
+        "title": "routingNumber",
+        "description": "The Bank’s routing number associated with the account number for an ACH transaction",
+        "example": 21000021
+      },
+      "cvv2": {
+        "type": "number",
+        "title": "cvv2",
+        "description": "Credit card’s CVV2 number",
+        "example": 123
+      },
+      "lastName": {
+        "type": "string",
+        "title": "lastName",
+        "example": "Jones",
+        "description": "The last name of the customer associated with the account number for the transaction",
+        "maxLength": 25
+      },
+      "zipCode": {
+        "type": "string",
+        "title": "zipCode",
+        "description": "Zip code associated with the account number for the transaction. This field is not required. This field, along with ADDRESS, is part of the credit card address verification as the value contained in this field will be validated against the value recorded at the issuing bank for the account when doing a credit card authorization. The response for this verification is found in the AUTH_AVS field. A hyphen “-“ should not be present when sending a numeric 9-digit US zip code",
+        "example": "198041258",
+        "minLength": 5,
+        "maxLength": 10
+      },
+      "orderNumber": {
+        "type": "string",
+        "title": "orderNumber",
+        "maxLength": 25,
+        "description": "Order number associated with the transaction on the customer's account. User-defined number that serves the same purpose as the invoiceNumber and referenceNumber fields. The most appropriate field may be used based on the user's business setup.",
+        "example": "65421"
+      },
+      "city": {
+        "type": "string",
+        "title": "city",
+        "example": "Troy",
+        "description": "The city associated with the account number for the transaction",
+        "maxLength": 25
+      },
+      "invoiceNumber": {
+        "type": "string",
+        "title": "invoiceNumber",
+        "example": "ABC-123",
+        "description": "Invoice number associated with the transaction on the customer's account. User-defined number that serves the same purpose as the referenceNumber and orderNumber fields. The most appropriate field may be used based on the user's business setup.",
+        "maxLength": 25
+      },
+      "cardEntryMethod": {
+        "title": "cardEntryMethod",
+        "type": "string",
+        "description": "Indicates how the card number was entered for the transaction:\nA—Used when scanning a Bar Code\nB—OCR\nD—Used when sending Swiped Track 2 data\nG—Chip (EMV contact)\nH—Used when sending Swiped Track 1 data\nM—Used when sending MICR data\nQ—Proximity / Contactless MSD non-EMV (Track 1 or Track 2 allowed)\nR—Proximity / Contactless EMV-based (Track 2 data is required)\nX—Key Entered MICR or Card Number (Typed in using keyboard or keypad)\nZ—BRIC/GUID Token Transaction\n0—Used when sending Key Entered Card data from MagneSafe 1.x Reader\n1—Used when sending Encrypted Track 1 data from MagneSafe 1.x Reader\n2—Used when sending Encrypted Track 2 data from MagneSafe 1.x Reader\n3—Used when sending Encrypted Track 1 and 2 data from MagneSafe 2.x Reader",
+        "maxLength": 1,
+        "enum": [
+          "A",
+          "B",
+          "D",
+          "G",
+          "H",
+          "M",
+          "Q",
+          "R",
+          "X",
+          "Z",
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "example": "G"
+      },
+      "state": {
+        "title": "state",
+        "type": "string",
+        "example": "MI",
+        "minLength": 2,
+        "maxLength": 2,
+        "description": "The two-character representation of the state associated with the account number for the transaction. This field is not required"
+      },
+      "expirationDate": {
+        "type": "string",
+        "title": "expirationDate",
+        "description": "Credit card’s expiration date",
+        "maxLength": 4,
+        "example": "2501"
+      },
+      "rentalNumber": {
+        "type": "string",
+        "title": "rentalNumber",
+        "description": "Reference number associated with the transaction on the customer's account. User-defined number that serves the same purpose as the referenceNumber and orderNumber fields. The most appropriate field may be used based on the user's business setup.",
+        "maxLength": 25,
+        "example": "4512"
+      },
+      "amount": {
+        "type": "number",
+        "title": "amount",
+        "description": "Positive dollar amount of funds to be moved during the transaction. Decimal point required.\nShould include any reference field amount such as tip_amt or tax_amt.\nShould not include any cashback, convenience fee, or surcharge amounts. These will be added to the amount authorized and included in the auth_amount_requested tag",
+        "format": "float",
+        "example": 11.12,
+        "minimum": 0.01
+      },
+      "taxExempt": {
+        "type": "string",
+        "title": "taxExempt",
+        "description": "Reference field that contains an indication as to whether the transaction is tax exempt. This field assists in qualifying a transaction for Level II processing using the following rule. If a transaction is tax-exempt, there is no need to send a tax amount, and if it is not then the tax amount should be supplied in the taxExempt field.\nY—Sending a tag with a value of Y indicates that the transaction is tax exempt and the tax amount does not need to be provided for Level II qualification.\nN—Sending a tag with a value of N indicates that the transaction is not tax exempt and the tax amount needs to be provided for Level II qualification.",
+        "enum": [
+          "Y",
+          "N"
+        ],
+        "example": "Y",
+        "maxLength": 1
+      },
+      "address": {
+        "type": "string",
+        "title": "address",
+        "description": "The street address associated with the account number. This field,\nalong with ZIP_CODE, is part of the credit card address verification as the numeric value\ncontained in this field will be validated against the value recorded at the issuing bank for the\naccount when doing a credit card authorization. The response for this verification is found in\nthe AUTH_AVS field",
+        "example": "250 Stephenson Hwy",
+        "maxLength": 30
+      },
+      "referencenumber": {
+        "type": "string",
+        "title": "referencenumber",
+        "description": "Required field for PIN-less Debit transactions that contains the consumer’s account information, such as electrical, telephone, loan, or policy number for the bill that is being paid during the transaction",
+        "maxLength": 25,
+        "example": "12345678"
+      },
+      "capture": {
+        "type": "boolean",
+        "title": "capture",
+        "description": "When set to true, an authorization and capture is performed. When set to false, only an authorization is performed",
+        "default": true
+      },
+      "emvData": {
+        "type": "string",
+        "title": "emvData",
+        "description": "The EMV_Data tag contains the request data from the EMV kernel as a variable list of tags and\ntheir data in TLV format",
+        "example": "9F34030200009F260828BF9D3AFCC8DD529F2701809F1008010103A0000000009F37044A BAA8C49F3602008595054040040000820258009F3303E0F8C89F1A0208409F3501229F1E0832323135 333731309F03060000000000009A031504309C01009F02060000000010005F2A0208409F090200025F 3401009F4104000000039F0607A0000000041010",
+        "maxLength": 510
+      },
+      "firstName": {
+        "type": "string",
+        "title": "firstName",
+        "description": "The first name of the customer associated with the account number for the transaction",
+        "example": "Jane",
+        "maxLength": 25
+      },
+      "taxAmount": {
+        "type": "number",
+        "title": "taxAmount",
+        "description": "Reference field that contains the tax amount which is included in the amount of the transaction. This field does not get added to the Amount field during the transaction, it is only referencing the tax amount already included.",
+        "format": "float",
+        "example": 1.12,
+        "maximum": 13
+      },
+      "account": {
+        "title": "account",
+        "type": "string",
+        "description": "The account number to be acted upon during the transaction",
+        "example": "4111111111111111",
+        "maxLength": 30,
+        "required": [
+          "account"
+        ]
+      },
+      "transaction": {
+        "title": "transaction",
+        "type": "integer",
+        "example": 123,
+        "description": "Unique user-defined code used to identify a transaction"
+      },
+      "tipAmount": {
+        "type": "number",
+        "title": "tipAmount",
+        "example": 5.25,
+        "format": "float",
+        "description": "Reference field that contains the tip amount which is included in the amount of the transaction. This field does not get added to the Amount field during the transaction, it is only referencing the tip amount already included.",
+        "maximum": 13
+      },
+      "batchId": {
+        "type": "number",
+        "title": "batchId",
+        "description": "Unique number created by the user to identify a batch of transactions"
+      }
+    },
+    "securitySchemes": {},
+    "parameters": {
+      "EPI-Id": {
+        "name": "EPI-Id",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "111-222-333-444"
+        },
+        "description": "Merchant's unique 4-part key, generated after boarding with processor"
+      },
+      "EPI-Signature": {
+        "name": "EPI-Signature",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "0123456789ABCDEF"
+        },
+        "description": "HMAC of URL and payload"
+      },
+      "Content-Type": {
+        "name": "Content-Type",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "application/json"
+        },
+        "description": "Content type of message"
+      },
+      "EPI-Trace": {
+        "name": "EPI-Trace",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Unique value defined by merchant to identify transactions. Value is not persisted with transaction and is only good during the current request/response chain"
+      },
+      "transaction": {
+        "name": "transaction",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "example": 123
+        },
+        "description": "Transaction ID"
+      },
+      "bric": {
+        "name": "bric",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "00DXDBWHB6WA5HJ3D71"
+        },
+        "description": "Token generated for each financial transaction"
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Successful request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_200_1"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Invalid request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "EPI-Id provided does not have rights to perform request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Requested resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "405": {
+        "description": "Invalid HTTP request method",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
