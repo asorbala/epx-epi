@@ -206,7 +206,7 @@
             "description": "Bad request."
           },
           "401": {
-            "description": "Unauthorized: EPI-Id is required"
+            "description": "Unauthorized: EPI-Signature is required.\nOr the generated HMAC does not match the endpoint and JSON payload received. Please review your HMAC-SHA256 procedure or the endpoint/body that are being sent."
           },
           "403": {
             "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
@@ -350,7 +350,7 @@
             "description": "Invalid request"
           },
           "401": {
-            "description": "Unauthorized: EPI-Id is required"
+            "description": "Unauthorized: EPI-Signature is required.\nOr the generated HMAC does not match the endpoint and JSON payload received. Please review your HMAC-SHA256 procedure or the endpoint/body that are being sent."
           },
           "403": {
             "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
@@ -1277,7 +1277,7 @@
             "description": "Bad request"
           },
           "401": {
-            "description": "Unauthorized: EPI-Id is required"
+            "description": "Unauthorized: EPI-Signature is required.\nOr the generated HMAC does not match the endpoint and JSON payload received. Please review your HMAC-SHA256 procedure or the endpoint/body that are being sent."
           },
           "403": {
             "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
@@ -1424,7 +1424,7 @@
             "description": "Invalid request"
           },
           "401": {
-            "description": "Unauthorized: EPI-Id is required"
+            "description": "Unauthorized: EPI-Signature is required.\nOr the generated HMAC does not match the endpoint and JSON payload received. Please review your HMAC-SHA256 procedure or the endpoint/body that are being sent."
           },
           "403": {
             "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
@@ -1756,7 +1756,7 @@
             "description": "Invalid request"
           },
           "401": {
-            "description": "Unauthorized: EPI-Id is required"
+            "description": "Unauthorized: EPI-Signature is required.\nOr the generated HMAC does not match the endpoint and JSON payload received. Please review your HMAC-SHA256 procedure or the endpoint/body that are being sent."
           },
           "403": {
             "description": "Forbidden"
