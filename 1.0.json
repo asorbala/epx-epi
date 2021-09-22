@@ -38,35 +38,31 @@
                 "$ref": "#/components/schemas/body"
               },
               "examples": {
-                "Request with TransactionID": {
-                  "value": {
-                    "account": "4111111111111111",
-                    "amount": 127.99,
-                    "transaction": 123,
-                    "expirationDate": "1212",
-                    "trackData": "4111111111111111=49121010000000000000?",
-                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101"
-                  }
-                },
-                "Minimal Request": {
+                "Request with TransactionID (BRIC)": {
                   "value": {
                     "amount": 127.99,
-                    "account": "4111111111111111",
-                    "expirationDate": "1212",
-                    "trackData": "4111111111111111=49121010000000000000?",
-                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101"
+                    "batchID": 201203,
+                    "transaction": 181,
+                    "cardEntryMethod": "Z",
+                    "industryType": "E"
                   }
                 },
-                "Request with Invoice and Entry Method": {
+                "Basic Ecommerce Request": {
                   "value": {
-                    "trackData": "4111111111111111=49121010000000000000?",
-                    "amount": 10,
-                    "transaction": 123,
-                    "invoiceNumber": "ABC-123",
-                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101",
-                    "cardEntryMethod": "G",
-                    "expirationDate": "1212",
-                    "account": "4111111111111111"
+                    "account": "4111111111111111",
+                    "expirationDate": "2512",
+                    "amount": 177.99,
+                    "address": {
+                      "address": "123 Any Street",
+                      "zipCode": "12345",
+                      "firstName": "Joe",
+                      "lastName": "Doe"
+                    },
+                    "cvv2": "123",
+                    "batchID": 201203,
+                    "transaction": 177,
+                    "cardEntryMethod": "E",
+                    "industryType": "E"
                   }
                 },
                 "Request with Tax and Enhanced Data": {
@@ -74,15 +70,16 @@
                     "account": "4111111111111111",
                     "amount": 127.99,
                     "transaction": 123,
+                    "batchID": 201203,
                     "taxAmount": 7.99,
                     "taxExempt": "Y",
                     "invoiceNumber": "ABC-123",
                     "expirationDate": "1212",
-                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101",
-                    "trackData": "4111111111111111=49121010000000000000?",
+                    "cardEntryMethod": "E",
+                    "industryType": "E",
                     "enhancedData": [
                       {
-                        "1": "123 Customer Street",
+                        "1": "",
                         "2": "7.99",
                         "3": "1",
                         "4": "0.00",
@@ -102,7 +99,7 @@
                         "line": "1"
                       },
                       {
-                        "1": "123 Main Street",
+                        "1": "",
                         "2": "7.99",
                         "3": "1",
                         "4": "0.00",
@@ -138,9 +135,10 @@
                     "amount": 127.99,
                     "capture": false,
                     "transaction": 123,
-                    "expirationDate": "1212",
-                    "trackData": "4111111111111111=49121010000000000000?",
-                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101"
+                    "batchID": 1,
+                    "cardEntryMethod": "E",
+                    "industryType": "E",
+                    "expirationDate": "1212"
                   }
                 },
                 "Request with Additional Data": {
@@ -148,19 +146,21 @@
                     "amount": 12.99,
                     "account": "4111111111111111",
                     "expirationDate": "2211",
-                    "trackData": "4111111111111111=49121010000000000000?",
-                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101",
-                    "cvv2": 123,
+                    "cvv2": "123",
                     "invoiceNumber": "ABC-123",
                     "orderNumber": "ABC-123",
                     "transaction": 123,
-                    "firstName": "Joe",
-                    "lastName": "Doe",
-                    "address": "123 Main Street",
-                    "city": "City",
-                    "state": "CA",
-                    "zipCode": "12345",
+                    "batchID": 12345,
+                    "address": {
+                      "address": "123 Any Street",
+                      "city": "City",
+                      "state": "CA",
+                      "zipCode": "12345",
+                      "firstName": "Joe",
+                      "lastName": "Doe"
+                    },
                     "cardEntryMethod": "X",
+                    "industryType": "E",
                     "system/tranType": "CCR1",
                     "userdata": {
                       "1": "ABC-123",
@@ -170,10 +170,42 @@
                     "referencenumber": "ABC-123",
                     "rentalnumber": "ABC-123"
                   }
+                },
+                "Request with EMV data": {
+                  "value": {
+                    "trackData": "4111111111111111=49121010000000000000?",
+                    "amount": 10,
+                    "transaction": 123,
+                    "batchID": 12345,
+                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101",
+                    "cardEntryMethod": "G",
+                    "industryType": "P"
+                  }
+                },
+                "PIN Debit Request": {
+                  "value": {
+                    "amount": 179,
+                    "trackData": "4000000000000002=25121010000000000000?",
+                    "pinBlock": "2DD950BTA77CAD538FFF9876544510E0Z01A",
+                    "batchID": 2107070,
+                    "transaction": 123,
+                    "cardID": "P",
+                    "cardEntryMethod": "D",
+                    "industryType": "P",
+                    "cvv2": "123",
+                    "address": {
+                      "firstName": "Joe",
+                      "lastName": "Doe",
+                      "address": "123 Main Street",
+                      "state": "DE",
+                      "zipCode": "12345"
+                    }
+                  }
                 }
               }
             }
-          }
+          },
+          "description": ""
         },
         "responses": {
           "200": {
@@ -279,7 +311,7 @@
         ]
       }
     },
-    "/refund/[bric]": {
+    "/refund/[BRIC]": {
       "post": {
         "tags": [
           "refunds"
@@ -312,7 +344,10 @@
                 "Valid Request": {
                   "value": {
                     "amount": 127.99,
-                    "transaction": 123
+                    "batchID": 201217,
+                    "transaction": 123,
+                    "industryType": "E",
+                    "cardEntryMethod": "Z"
                   }
                 }
               }
@@ -424,7 +459,8 @@
             "$ref": "#/components/parameters/bric"
           }
         ]
-      }
+      },
+      "parameters": []
     },
     "/ach": {
       "post": {
@@ -460,8 +496,8 @@
                     "amount": 127.99,
                     "transaction": 123,
                     "address": {
-                      "firstName": "Galileo",
-                      "lastName": "Galilei"
+                      "firstName": "Joe",
+                      "lastName": "Doe"
                     }
                   }
                 }
@@ -476,7 +512,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_1"
+                  "$ref": "#/components/schemas/inline_response_200"
                 },
                 "examples": {
                   "Success": {
@@ -665,9 +701,21 @@
               "examples": {
                 "Valid Request": {
                   "value": {
+                    "amount": 179,
                     "account": "4111111111111111",
-                    "amount": 127.99,
-                    "transaction": 123
+                    "expirationDate": "2512",
+                    "batchID": 201217,
+                    "transaction": 123,
+                    "industryType": "E",
+                    "cardEntryMethod": "E",
+                    "cvv2": "123",
+                    "address": {
+                      "firstName": "Joe",
+                      "lastName": "Doe",
+                      "address": "123 Main Street",
+                      "state": "DE",
+                      "zipCode": "12345"
+                    }
                   }
                 }
               }
@@ -738,7 +786,7 @@
         "tags": [
           "sales"
         ],
-        "description": "This endpoint closes all captured transactions.",
+        "description": "This endpoint closes all captured transactions from all open batches.",
         "parameters": [
           {
             "$ref": "#/components/parameters/EPI-Id"
@@ -812,7 +860,7 @@
       ],
       "parameters": []
     },
-    "/void/[bric]": {
+    "/void/[BRIC]": {
       "put": {
         "tags": [
           "refunds"
@@ -885,7 +933,50 @@
             "url": "https://epi.epxuap.com"
           }
         ],
-        "summary": "Void an authorization"
+        "summary": "Void an authorization",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "x-examples": {
+                  "example-1": {
+                    "batchID": 201217,
+                    "transaction": 123,
+                    "cardEntryMethod": "Z"
+                  }
+                },
+                "properties": {
+                  "batchID": {
+                    "$ref": "#/components/schemas/batchId"
+                  },
+                  "transaction": {
+                    "$ref": "#/components/schemas/transaction"
+                  },
+                  "cardEntryMethod": {
+                    "$ref": "#/components/schemas/cardEntryMethod"
+                  }
+                },
+                "required": [
+                  "batchID",
+                  "transaction",
+                  "cardEntryMethod"
+                ]
+              },
+              "examples": {
+                "Valid Request": {
+                  "value": {
+                    "batchID": 1234,
+                    "transaction": 123,
+                    "cardEntryMethod": "Z"
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        }
       },
       "servers": [
         {
@@ -894,8 +985,8 @@
       ],
       "parameters": []
     },
-    "/sale/capture/[bric]": {
-      "post": {
+    "/sale/[BRIC]/capture": {
+      "put": {
         "tags": [
           "sales"
         ],
@@ -921,13 +1012,16 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/body_8"
+                "$ref": "#/components/schemas/body_3"
               },
               "examples": {
                 "Valid Request": {
                   "value": {
                     "amount": 127.99,
-                    "transaction": 123
+                    "batchID": 201217,
+                    "transaction": 123,
+                    "industryType": "E",
+                    "cardEntryMethod": "Z"
                   }
                 }
               }
@@ -992,18 +1086,14 @@
           "url": "https://epi.epxuap.com"
         }
       ],
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/bric"
-        }
-      ]
+      "parameters": []
     },
-    "/sale/inc/[bric]": {
+    "/sale/inc/[BRIC]": {
       "put": {
         "tags": [
           "sales"
         ],
-        "description": "This endpoint adds a specific amount of money to a transaction, or incrementally authorizes a new amount. The original transaction BRIC (EPX Transaction Identifier) is required. The amount in the response example is the additional amount needed. For example, if the initial authorization was $20 and the new amount needs to be $30, the json payload would show an Amount of 10.",
+        "description": "This endpoint adds a specific amount of money to an AuthorizeOnly transaction and incrementally authorizes a new amount. The original transaction BRIC (EPX Transaction Identifier) is required. The amount in the response example is the additional amount needed. For example, if the initial authorization was $20 and the new amount needs to be $30, the json payload would show an Amount of 10.",
         "parameters": [
           {
             "$ref": "#/components/parameters/EPI-Id"
@@ -1025,13 +1115,16 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/body_9"
+                "$ref": "#/components/schemas/body_3"
               },
               "examples": {
                 "Valid Request": {
                   "value": {
                     "amount": 10,
-                    "transaction": 123
+                    "batchID": 201217,
+                    "transaction": 123,
+                    "industryType": "E",
+                    "cardEntryMethod": "Z"
                   }
                 }
               }
@@ -1097,18 +1190,14 @@
           "url": "https://epi.epxuap.com"
         }
       ],
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/bric"
-        }
-      ]
+      "parameters": []
     },
     "/avs": {
       "post": {
         "tags": [
           "sales"
         ],
-        "description": "This endpoint performs transactions using the Address Verification System (AVS), which verifies the customer’s address to help prevent fraud.",
+        "description": "The account verification transaction is used to validate a customer's account information\nbefore running a financial transaction. This is done by sending a $0.00 amount during the\ntransaction. \nThe /avs endpoint requires Account, Expiration Date, Transaction ID, Card Entry Method, and\nIndustry Type in the payload. Optional tags that will help with AVS and validation are Address,\nZip Code, and CVV2",
         "parameters": [
           {
             "$ref": "#/components/parameters/EPI-Id"
@@ -1127,20 +1216,25 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/body_10"
+                "$ref": "#/components/schemas/body_7"
               },
               "examples": {
                 "Valid Request": {
                   "value": {
                     "account": "4111111111111111",
-                    "expirationDate": "2211",
+                    "expirationDate": "2512",
+                    "cvv2": "123",
                     "transaction": 123,
-                    "firstName": "Joe",
-                    "lastName": "Doe",
-                    "address": "123 Main Street",
-                    "city": "City",
-                    "state": "CA",
-                    "zipCode": "12345"
+                    "industryType": "E",
+                    "cardEntryMethod": "E",
+                    "batchID": 201217,
+                    "address": {
+                      "firstName": "Joe",
+                      "lastName": "Doe",
+                      "address": "123 Main Street",
+                      "state": "DE",
+                      "zipCode": "12345"
+                    }
                   }
                 }
               }
@@ -1206,12 +1300,12 @@
         }
       ]
     },
-    "/sale/[bric]": {
+    "/sale/[BRIC]": {
       "post": {
         "tags": [
           "sales"
         ],
-        "description": "This endpoint edits an open Authorization and Capture transaction. The requests requires the trasnaction's BRIC (EPX Transaction Identifier) and can only be performed on an approved transaction that has not been voided, closed, or settled.",
+        "description": "The BRIC is being used to reference a previous credit card transactions GUID / Token in the EPX \nsystem. Since the EPX BRIC is a unique reference value, there is no need to include the \naccount number and expiration date. If the address and zip code was supplied with the \noriginal transaction for the BRIC in use it will be included with the transaction request",
         "parameters": [
           {
             "$ref": "#/components/parameters/EPI-Id"
@@ -1233,13 +1327,16 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/body_11"
+                "$ref": "#/components/schemas/body_3"
               },
               "examples": {
                 "Valid Request": {
                   "value": {
-                    "amount": 131.99,
-                    "tipAmount": 5.55
+                    "amount": 127.99,
+                    "batchID": 201203,
+                    "transaction": 181,
+                    "cardEntryMethod": "Z",
+                    "industryType": "E"
                   }
                 }
               }
@@ -1297,7 +1394,7 @@
             "url": "https://epi.epxuap.com"
           }
         ],
-        "summary": "Tip Adjust"
+        "summary": "Sale with BRIC"
       },
       "servers": [
         {
@@ -1351,14 +1448,97 @@
             "$ref": "#/components/parameters/bric"
           }
         ]
+      },
+      "parameters": [],
+      "put": {
+        "summary": "",
+        "operationId": "put-sale-[BRIC]",
+        "description": "The Edit Sale (Authorization and Capture) transaction is used to edit an open Sale \n(Authorization and Capture) transaction. The transaction is a BRIC-based request and can only \nbe performed on an approved Sale transaction that has not been voided, closed, or settled.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EPI-Id"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Signature"
+          },
+          {
+            "$ref": "#/components/parameters/EPI-Trace"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden: EPI-Id provided doesn’t have the right to perform the request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "x-examples": {
+                  "example-1": {
+                    "amount": 131.99,
+                    "tipAmount": 5.55
+                  }
+                },
+                "properties": {
+                  "amount": {
+                    "$ref": "#/components/schemas/amount"
+                  },
+                  "tipAmount": {
+                    "$ref": "#/components/schemas/tipAmount"
+                  }
+                },
+                "required": [
+                  "amount",
+                  "tipAmount"
+                ]
+              },
+              "examples": {
+                "Valid Request": {
+                  "value": {
+                    "amount": 11.12,
+                    "tipAmount": 5.25
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
-    "/reverse/[bric]": {
+    "/reverse/[BRIC]": {
       "post": {
         "tags": [
           "refunds"
         ],
-        "description": "This endpoint reverses the authorization of funds on a credit card. This will release the funds that are being held at the issuing bank.",
+        "description": "The reverse transaction is used to remove the authorization hold on a credit card and void the \ntransaction within the same request. This will release the funds that are being held at the \nissuing bank. The BRIC sent during this transaction is one from an open / unsettled sale or open \n/ uncaptured authorization only transaction",
         "parameters": [
           {
             "$ref": "#/components/parameters/bric"
@@ -1385,8 +1565,10 @@
               "examples": {
                 "Valid Request": {
                   "value": {
-                    "batchId": 123,
-                    "transaction": 123
+                    "batchID": 201217,
+                    "transaction": 123,
+                    "industryType": "E",
+                    "cardEntryMethod": "Z"
                   }
                 }
               }
@@ -1498,7 +1680,8 @@
             "$ref": "#/components/parameters/bric"
           }
         ]
-      }
+      },
+      "parameters": []
     },
     "/ping": {
       "get": {
@@ -1575,7 +1758,7 @@
         }
       ]
     },
-    "/storage/[bric]": {
+    "/storage/[BRIC]": {
       "post": {
         "tags": [
           "miscellaneous"
@@ -1650,11 +1833,7 @@
           "url": "https://epi.epxuap.com"
         }
       ],
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/bric"
-        }
-      ]
+      "parameters": []
     },
     "/storage": {
       "post": {
@@ -1729,10 +1908,10 @@
         }
       ]
     },
-    "/batch/[transaction]": {
-      "post": {
+    "/batch/[batchID]": {
+      "put": {
         "summary": "Batch Close by Transaction",
-        "operationId": "post-batch-[transactionId]",
+        "operationId": "put-batch-[batchID]",
         "description": "This endpoint closes a selected number of transactions based on transaction IDs provided.",
         "parameters": [
           {
@@ -1824,7 +2003,7 @@
             "$ref": "#/components/parameters/EPI-Trace"
           },
           {
-            "$ref": "#/components/parameters/transaction"
+            "$ref": "#/components/parameters/batchID"
           }
         ]
       }
@@ -1848,16 +2027,6 @@
   ],
   "components": {
     "schemas": {
-      "sale_userData": {
-        "type": "object",
-        "description": "userData is custom data that can be sent with a transaction, such as transaction details. This information will be returned. Up to 10 fields of userData can be added.",
-        "properties": {
-          "1": {
-            "type": "string",
-            "maxLength": 80
-          }
-        }
-      },
       "sale_userdata": {
         "type": "object",
         "description": "userData is custom data that can be sent with a transaction, such as transaction details. This information will be returned. Up to 10 fields of userData can be added.",
@@ -1899,68 +2068,79 @@
       "body": {
         "type": "object",
         "x-examples": {
-          "example-1": {}
+          "example-1": {
+            "account": "4111111111111111",
+            "cvv2": 123,
+            "userData": {
+              "1": "string"
+            },
+            "orderNumber": "65421",
+            "invoiceNumber": "ABC-123",
+            "cardEntryMethod": "G",
+            "userdata": {
+              "1": "string"
+            },
+            "rentalnumber": "4512",
+            "expirationDate": "2501",
+            "amount": 11.12,
+            "taxExempt": "Y",
+            "referencenumber": "12345678",
+            "capture": true,
+            "emvData": "9F34030200009F260828BF9D3AFCC8DD529F2701809F1008010103A0000000009F37044A BAA8C49F3602008595054040040000820258009F3303E0F8C89F1A0208409F3501229F1E0832323135 333731309F03060000000000009A031504309C01009F02060000000010005F2A0208409F090200025F 3401009F4104000000039F0607A0000000041010",
+            "trackData": "B4111111111111111^CARD/TEST^10121010000012345678",
+            "special": {
+              "2": "string",
+              "4": "string"
+            },
+            "enhancedData": [
+              {
+                "1": "string",
+                "line": "1",
+                "dataType": "g"
+              }
+            ],
+            "taxAmount": 1.12,
+            "transaction": 123,
+            "system/tranType": "string"
+          }
         },
+        "description": "",
         "properties": {
-          "cvv2": {
-            "$ref": "#/components/schemas/cvv2"
+          "amount": {
+            "$ref": "#/components/schemas/amount"
           },
-          "lastName": {
-            "$ref": "#/components/schemas/lastName"
-          },
-          "zipCode": {
-            "$ref": "#/components/schemas/zipCode"
-          },
-          "userData": {
-            "$ref": "#/components/schemas/sale_userData"
-          },
-          "orderNumber": {
-            "$ref": "#/components/schemas/orderNumber"
-          },
-          "city": {
-            "$ref": "#/components/schemas/city"
-          },
-          "userdata": {
-            "$ref": "#/components/schemas/sale_userdata"
-          },
-          "invoiceNumber": {
-            "$ref": "#/components/schemas/invoiceNumber"
-          },
-          "cardEntryMethod": {
-            "$ref": "#/components/schemas/cardEntryMethod"
-          },
-          "state": {
-            "$ref": "#/components/schemas/state"
+          "account": {
+            "$ref": "#/components/schemas/account"
           },
           "expirationDate": {
             "$ref": "#/components/schemas/expirationDate"
           },
-          "rentalnumber": {
-            "$ref": "#/components/schemas/rentalNumber"
-          },
-          "amount": {
-            "$ref": "#/components/schemas/amount"
-          },
-          "taxExempt": {
-            "$ref": "#/components/schemas/taxExempt"
-          },
-          "address": {
-            "$ref": "#/components/schemas/address"
-          },
-          "enhancedData": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/sale_enhancedData"
-            }
-          },
-          "referencenumber": {
-            "$ref": "#/components/schemas/referencenumber"
-          },
           "capture": {
             "$ref": "#/components/schemas/capture"
           },
-          "emvData": {
-            "$ref": "#/components/schemas/emvData"
+          "cvv2": {
+            "$ref": "#/components/schemas/cvv2"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/transaction"
+          },
+          "batchID": {
+            "$ref": "#/components/schemas/batchId"
+          },
+          "industryType": {
+            "$ref": "#/components/schemas/industryType"
+          },
+          "cardEntryMethod": {
+            "$ref": "#/components/schemas/cardEntryMethod"
+          },
+          "orderNumber": {
+            "$ref": "#/components/schemas/orderNumber"
+          },
+          "invoiceNumber": {
+            "$ref": "#/components/schemas/invoiceNumber"
+          },
+          "address": {
+            "$ref": "#/components/schemas/addressData"
           },
           "trackData": {
             "type": "string",
@@ -1968,99 +2148,142 @@
             "maxLength": 256,
             "example": "B4111111111111111^CARD/TEST^10121010000012345678"
           },
+          "emvData": {
+            "$ref": "#/components/schemas/emvData"
+          },
+          "referencenumber": {
+            "$ref": "#/components/schemas/referencenumber"
+          },
+          "rentalnumber": {
+            "$ref": "#/components/schemas/rentalNumber"
+          },
+          "userdata": {
+            "$ref": "#/components/schemas/sale_userdata"
+          },
+          "taxExempt": {
+            "$ref": "#/components/schemas/taxExempt"
+          },
           "special": {
             "$ref": "#/components/schemas/sale_special"
           },
-          "firstName": {
-            "$ref": "#/components/schemas/firstName"
+          "enhancedData": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/sale_enhancedData"
+            }
           },
           "taxAmount": {
             "$ref": "#/components/schemas/taxAmount"
           },
-          "account": {
-            "$ref": "#/components/schemas/account"
-          },
-          "transaction": {
-            "$ref": "#/components/schemas/transaction"
-          },
           "system/tranType": {
             "type": "string"
+          },
+          "pinBlock": {
+            "$ref": "#/components/schemas/pinBlock"
+          },
+          "cardID": {
+            "$ref": "#/components/schemas/cardID"
           }
         },
         "required": [
-          "expirationDate",
           "amount",
-          "emvData",
-          "trackData",
-          "account"
+          "batchID",
+          "industryType",
+          "cardEntryMethod"
         ]
       },
       "inline_response_200": {
         "type": "object",
+        "x-examples": {
+          "example-1": {
+            "reference": {
+              "bric": "string",
+              "timestamp": "string"
+            },
+            "data": {
+              "authorization": "string",
+              "response": "string",
+              "text": "string"
+            },
+            "errors": null
+          }
+        },
         "properties": {
           "reference": {
             "type": "object",
             "properties": {
               "bric": {
-                "type": "string"
+                "type": "string",
+                "description": "The BRIC field contains the globally unique identifier (GUID) for the transaction \nrequested. This value is unique throughout the EPX platform. When retained, it can be used \nlater to reference the transaction for other transactions, such as a refund. It can also be used \nby the relationship manager to refer to specific transactions."
               },
               "timestamp": {
                 "type": "string"
               }
-            }
+            },
+            "required": [
+              "bric",
+              "timestamp"
+            ]
           },
           "data": {
             "type": "object",
             "properties": {
               "authorization": {
-                "type": "string"
+                "type": "string",
+                "description": "The AUTH_CODE field contains the approval code for the transaction requested. In the event \nthat there is no approval, this field will be empty. Some issuers will return an authorization code \non declined transactions. Use the AUTH_RESP value to determine if a transaction was \napproved"
               },
               "response": {
-                "type": "string"
+                "type": "string",
+                "description": "The response field contains the Response Code for the transaction requested and should be \nused to determine the result of the transaction. This information is passed along from the issuing \nbank. The code 00 is returned on Approval, and most other codes would mean a Decline or Error. Please view a full list of Response Codes."
               },
               "text": {
-                "type": "string"
+                "type": "string",
+                "description": "The AUTH_RESP_TEXT field contains additional information for the transaction requested. This \ninformation can change at any time and should not be used in code to validate the response \nof a transaction (except for a limited case with Account Updater, for MasterCard only). The \nfield is used to provide more information about the transaction when there is a decline, or a \ntransaction with insufficient information to process."
               }
-            }
+            },
+            "required": [
+              "response"
+            ]
           },
           "errors": {}
         }
       },
-      "body_1": {
-        "type": "object",
-        "properties": {
-          "amount": {
-            "$ref": "#/components/schemas/amount"
-          },
-          "capture": {
-            "$ref": "#/components/schemas/capture"
-          },
-          "account": {
-            "$ref": "#/components/schemas/account"
-          },
-          "transaction": {
-            "$ref": "#/components/schemas/transaction"
-          }
-        }
-      },
-      "body_2": {
-        "type": "object",
-        "properties": {
-          "amount": {
-            "$ref": "#/components/schemas/amount"
-          }
-        }
-      },
       "body_3": {
+        "description": "",
         "type": "object",
+        "x-examples": {
+          "example-1": {
+            "amount": "127.99",
+            "batchID": 201217,
+            "transaction": 123,
+            "industryType": "E",
+            "cardEntryMethod": "Z"
+          }
+        },
         "properties": {
           "amount": {
             "$ref": "#/components/schemas/amount"
           },
+          "batchID": {
+            "$ref": "#/components/schemas/batchId"
+          },
           "transaction": {
             "$ref": "#/components/schemas/transaction"
+          },
+          "industryType": {
+            "$ref": "#/components/schemas/industryType"
+          },
+          "cardEntryMethod": {
+            "$ref": "#/components/schemas/cardEntryMethod"
           }
-        }
+        },
+        "required": [
+          "amount",
+          "batchID",
+          "transaction",
+          "industryType",
+          "cardEntryMethod"
+        ]
       },
       "ach_address": {
         "type": "object",
@@ -2168,17 +2391,6 @@
           }
         }
       },
-      "body_5": {
-        "type": "object",
-        "properties": {
-          "amount": {
-            "$ref": "#/components/schemas/amount"
-          },
-          "transaction": {
-            "$ref": "#/components/schemas/transaction"
-          }
-        }
-      },
       "inline_response_200_2": {
         "type": "object",
         "properties": {
@@ -2222,7 +2434,27 @@
         }
       },
       "body_7": {
+        "description": "",
         "type": "object",
+        "x-examples": {
+          "example-1": {
+            "amount": 179,
+            "account": "4111111111111111",
+            "expirationDate": "2512",
+            "batchID": 201217,
+            "transaction": 123,
+            "industryType": "E",
+            "cardEntryMethod": "E",
+            "address": {
+              "firstName": "Galileo",
+              "lastName": "Galilei",
+              "address": "123 Main Street",
+              "state": "DE",
+              "zipCode": "12345"
+            },
+            "cvv2": "123"
+          }
+        },
         "properties": {
           "amount": {
             "$ref": "#/components/schemas/amount"
@@ -2230,32 +2462,36 @@
           "account": {
             "$ref": "#/components/schemas/account"
           },
-          "transaction": {
-            "$ref": "#/components/schemas/transaction"
-          }
-        }
-      },
-      "body_8": {
-        "type": "object",
-        "properties": {
-          "amount": {
-            "$ref": "#/components/schemas/amount"
+          "expirationDate": {
+            "$ref": "#/components/schemas/expirationDate"
+          },
+          "batchID": {
+            "$ref": "#/components/schemas/batchId"
           },
           "transaction": {
             "$ref": "#/components/schemas/transaction"
-          }
-        }
-      },
-      "body_9": {
-        "type": "object",
-        "properties": {
-          "amount": {
-            "$ref": "#/components/schemas/amount"
           },
-          "transaction": {
-            "$ref": "#/components/schemas/transaction"
+          "industryType": {
+            "$ref": "#/components/schemas/industryType"
+          },
+          "cardEntryMethod": {
+            "$ref": "#/components/schemas/cardEntryMethod"
+          },
+          "cvv2": {
+            "$ref": "#/components/schemas/cvv2"
+          },
+          "address": {
+            "$ref": "#/components/schemas/addressData"
           }
-        }
+        },
+        "required": [
+          "account",
+          "expirationDate",
+          "batchID",
+          "transaction",
+          "industryType",
+          "cardEntryMethod"
+        ]
       },
       "inline_response_200_3": {
         "type": "object",
@@ -2291,77 +2527,37 @@
           "errors": {}
         }
       },
-      "body_10": {
+      "body_12": {
+        "description": "",
         "type": "object",
-        "properties": {
-          "firstName": {
-            "$ref": "#/components/schemas/firstName"
-          },
-          "lastName": {
-            "$ref": "#/components/schemas/lastName"
-          },
-          "zipCode": {
-            "$ref": "#/components/schemas/zipCode"
-          },
-          "address": {
-            "$ref": "#/components/schemas/address"
-          },
-          "city": {
-            "$ref": "#/components/schemas/city"
-          },
-          "state": {
-            "$ref": "#/components/schemas/state"
-          },
-          "account": {
-            "$ref": "#/components/schemas/account"
-          },
-          "transaction": {
-            "$ref": "#/components/schemas/transaction"
-          },
-          "expirationDate": {
-            "$ref": "#/components/schemas/expirationDate"
+        "x-examples": {
+          "example-1": {
+            "batchID": 201217,
+            "transaction": 123,
+            "industryType": "E",
+            "cardEntryMethod": "Z"
           }
         },
-        "required": [
-          "firstName",
-          "lastName",
-          "zipCode",
-          "address",
-          "city",
-          "state",
-          "account",
-          "transaction"
-        ]
-      },
-      "body_11": {
-        "type": "object",
         "properties": {
-          "amount": {
-            "$ref": "#/components/schemas/amount"
-          },
-          "tipAmount": {
-            "$ref": "#/components/schemas/tipAmount"
-          }
-        }
-      },
-      "body_12": {
-        "type": "object",
-        "properties": {
-          "batchId": {
+          "batchID": {
             "$ref": "#/components/schemas/batchId"
           },
           "transaction": {
             "$ref": "#/components/schemas/transaction"
+          },
+          "industryType": {
+            "$ref": "#/components/schemas/industryType"
+          },
+          "cardEntryMethod": {
+            "$ref": "#/components/schemas/cardEntryMethod"
           }
-        }
-      },
-      "body_13": {
-        "type": "object",
-        "properties": {
-          "transaction": {
-            "$ref": "#/components/schemas/transaction"
-          }
-        }
+        },
+        "required": [
+          "batchID",
+          "transaction",
+          "industryType",
+          "cardEntryMethod"
+        ]
       },
       "inline_response_200_4": {
         "type": "object",
@@ -2378,152 +2574,6 @@
             }
           },
           "data": {},
-          "errors": {}
-        }
-      },
-      "inline_response_200_5": {
-        "type": "object",
-        "properties": {
-          "reference": {
-            "type": "object",
-            "properties": {
-              "bric": {
-                "type": "string"
-              },
-              "timestamp": {
-                "type": "string"
-              }
-            }
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "userdata/7": {
-                "type": "string"
-              },
-              "userdata/6": {
-                "type": "string"
-              },
-              "userdata/9": {
-                "type": "string"
-              },
-              "userdata/8": {
-                "type": "string"
-              },
-              "closeddate": {
-                "type": "string"
-              },
-              "userdata/3": {
-                "type": "string"
-              },
-              "userdata/2": {
-                "type": "string"
-              },
-              "userdata/5": {
-                "type": "string"
-              },
-              "userdata/4": {
-                "type": "string"
-              },
-              "userdata/1": {
-                "type": "string"
-              },
-              "epxid/customer": {
-                "type": "string"
-              },
-              "authorization": {
-                "type": "string"
-              },
-              "ordernumber": {
-                "type": "string"
-              },
-              "epxid/terminal": {
-                "type": "string"
-              },
-              "invoicenumber": {
-                "type": "string"
-              },
-              "rentalnumber": {
-                "type": "string"
-              },
-              "tipamount": {
-                "type": "string"
-              },
-              "void": {
-                "type": "string"
-              },
-              "authamount": {
-                "type": "string"
-              },
-              "epxid/merchant": {
-                "type": "string"
-              },
-              "epxid/dba": {
-                "type": "string"
-              },
-              "markedtosettle": {
-                "type": "string"
-              },
-              "referencenumber": {
-                "type": "string"
-              },
-              "batchid": {
-                "type": "string"
-              },
-              "folionumber": {
-                "type": "string"
-              },
-              "system/trantype": {
-                "type": "string"
-              },
-              "userdata/10": {
-                "type": "string"
-              },
-              "response": {
-                "type": "string"
-              },
-              "authtrandategmt": {
-                "type": "string"
-              },
-              "transaction": {
-                "type": "string"
-              }
-            }
-          },
-          "errors": {}
-        }
-      },
-      "inline_response_200_6": {
-        "type": "object",
-        "properties": {
-          "reference": {
-            "type": "object",
-            "properties": {
-              "bric": {
-                "type": "string"
-              },
-              "timestamp": {
-                "type": "string"
-              }
-            }
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "payload1": {
-                "type": "string"
-              },
-              "response": {
-                "type": "string"
-              },
-              "text": {
-                "type": "string"
-              },
-              "batchID": {
-                "type": "string"
-              }
-            }
-          },
           "errors": {}
         }
       },
@@ -2556,10 +2606,10 @@
         "example": 21000021
       },
       "cvv2": {
-        "type": "number",
+        "type": "string",
         "title": "cvv2",
         "description": "Credit card’s CVV2 number",
-        "example": 123
+        "example": "123"
       },
       "lastName": {
         "type": "string",
@@ -2572,9 +2622,7 @@
         "type": "string",
         "title": "zipCode",
         "description": "Zip code associated with the account number for the transaction. This field is not required. This field, along with ADDRESS, is part of the credit card address verification as the value contained in this field will be validated against the value recorded at the issuing bank for the account when doing a credit card authorization. The response for this verification is found in the AUTH_AVS field. A hyphen “-“ should not be present when sending a numeric 9-digit US zip code",
-        "example": "198041258",
-        "minLength": 5,
-        "maxLength": 10
+        "example": "198041258"
       },
       "orderNumber": {
         "type": "string",
@@ -2588,7 +2636,10 @@
         "title": "city",
         "example": "Troy",
         "description": "The city associated with the account number for the transaction",
-        "maxLength": 25
+        "maxLength": 25,
+        "x-examples": {
+          "example-1": "Troy"
+        }
       },
       "invoiceNumber": {
         "type": "string",
@@ -2598,8 +2649,8 @@
         "maxLength": 25
       },
       "cardEntryMethod": {
-        "title": "cardEntryMethod",
         "type": "string",
+        "title": "cardEntryMethod",
         "description": "Indicates how the card number was entered for the transaction:\nA—Used when scanning a Bar Code\nB—OCR\nD—Used when sending Swiped Track 2 data\nG—Chip (EMV contact)\nH—Used when sending Swiped Track 1 data\nM—Used when sending MICR data\nQ—Proximity / Contactless MSD non-EMV (Track 1 or Track 2 allowed)\nR—Proximity / Contactless EMV-based (Track 2 data is required)\nX—Key Entered MICR or Card Number (Typed in using keyboard or keypad)\nZ—BRIC/GUID Token Transaction\n0—Used when sending Key Entered Card data from MagneSafe 1.x Reader\n1—Used when sending Encrypted Track 1 data from MagneSafe 1.x Reader\n2—Used when sending Encrypted Track 2 data from MagneSafe 1.x Reader\n3—Used when sending Encrypted Track 1 and 2 data from MagneSafe 2.x Reader",
         "maxLength": 1,
         "enum": [
@@ -2616,7 +2667,8 @@
           "0",
           "1",
           "2",
-          "3"
+          "3",
+          "E"
         ],
         "example": "G"
       },
@@ -2730,7 +2782,73 @@
       "batchId": {
         "type": "number",
         "title": "batchId",
-        "description": "Unique number created by the user to identify a batch of transactions"
+        "description": "Unique number created by the user to identify a batch of transactions",
+        "x-examples": {
+          "example-1": 201217
+        }
+      },
+      "addressData": {
+        "description": "",
+        "type": "object",
+        "x-examples": {},
+        "properties": {
+          "firstName": {
+            "$ref": "#/components/schemas/firstName"
+          },
+          "lastName": {
+            "$ref": "#/components/schemas/lastName"
+          },
+          "address": {
+            "$ref": "#/components/schemas/address"
+          },
+          "city": {
+            "$ref": "#/components/schemas/city"
+          },
+          "state": {
+            "$ref": "#/components/schemas/state"
+          },
+          "zipCode": {
+            "$ref": "#/components/schemas/zipCode"
+          }
+        }
+      },
+      "industryType": {
+        "type": "string",
+        "title": "industryType",
+        "x-examples": {
+          "example-1": "P"
+        },
+        "description": "The use of the INDUSTRY_TYPE tag allows any Retail, CAT, Banking, ECOM, or MOTO transaction\nto be sent to the same 4-part key and eliminates the need to use unique TERMINAL_NBR(s)\nconfigured specifically for each industry type.\nIf the INDUSTRY_TYPE tag is not present in the request, the EPX platform will determine the best\nvalue to use based on the rest of the items in the request, specifically TRAN_TYPE.\nThe supported values are:  \n P - Cardholder Pesent (Retail, CAT, Banking)\n E - Ecommerce\n M - MOTO",
+        "enum": [
+          "P",
+          "M",
+          "E"
+        ],
+        "example": "P"
+      },
+      "pinBlock": {
+        "type": "string",
+        "title": "pinBlock",
+        "description": "The data provided within the PIN_BLK field should be the 16-character hexadecimal encrypted \npin block (EPD) followed by the DUKPT key serial number KSN. Depending on the specific PIN \nentry device (PED) this data may need to be reformatted. ",
+        "x-examples": {
+          "example-1": "2DD950BTA77CAD538FFF9876544510E0Z01A"
+        },
+        "example": "2DD950BTA77CAD538FFF9876544510E0Z01A"
+      },
+      "cardID": {
+        "type": "string",
+        "title": "cardID",
+        "description": "The CARD_ID field contains the code that represents the industry used for the transaction \nrequested. This field is defined in the Transaction Request Fields.\nCard Identification Codes \n• 0—CARDHOLDER PRESENT \n• 1—CARDHOLDER NOT PRESENT \n• M—CARDHOLDER PRESENT, Card not readable \n• P—PIN",
+        "enum": [
+          "0",
+          "1",
+          "M",
+          "P"
+        ],
+        "example": "P",
+        "x-examples": {
+          "example-1": "P"
+        }
       }
     },
     "securitySchemes": {},
@@ -2741,7 +2859,7 @@
         "required": true,
         "schema": {
           "type": "string",
-          "example": "111-222-333-444"
+          "example": "1111-222222-3-4"
         },
         "description": "Merchant's unique 4-part key, generated after boarding with processor"
       },
@@ -2753,7 +2871,7 @@
           "type": "string",
           "example": "0123456789ABCDEF"
         },
-        "description": "HMAC of URL and payload"
+        "description": "HMAC of endpoint and payload"
       },
       "Content-Type": {
         "name": "Content-Type",
@@ -2774,122 +2892,27 @@
         },
         "description": "Unique value defined by merchant to identify transactions. Value is not persisted with transaction and is only good during the current request/response chain"
       },
-      "transaction": {
-        "name": "transaction",
+      "batchID": {
+        "name": "batchID",
         "in": "path",
-        "required": true,
         "schema": {
           "type": "integer",
           "example": 123
         },
-        "description": "Transaction ID"
+        "description": "Unique number created by the user to identify a batch of transactions",
+        "required": true
       },
       "bric": {
-        "name": "bric",
+        "name": "BRIC",
         "in": "path",
         "required": true,
         "schema": {
           "type": "string",
           "example": "00DXDBWHB6WA5HJ3D71"
         },
-        "description": "Token generated for each financial transaction"
+        "description": "Token/Unique Transaction ID generated for each financial transaction"
       }
     },
-    "responses": {
-      "200": {
-        "description": "Successful request",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/inline_response_200_1"
-            }
-          }
-        }
-      },
-      "400": {
-        "description": "Invalid request",
-        "content": {
-          "application/json": {
-            "schema": {
-              "properties": {
-                "id": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "401": {
-        "description": "Unauthorized request",
-        "content": {
-          "application/json": {
-            "schema": {
-              "properties": {
-                "id": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "403": {
-        "description": "EPI-Id provided does not have rights to perform request",
-        "content": {
-          "application/json": {
-            "schema": {
-              "properties": {
-                "id": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "Requested resource not found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "properties": {
-                "id": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "405": {
-        "description": "Invalid HTTP request method",
-        "content": {
-          "application/json": {
-            "schema": {
-              "properties": {
-                "id": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "500": {
-        "description": "Internal server error",
-        "content": {
-          "application/json": {
-            "schema": {
-              "properties": {
-                "id": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+    "responses": {}
   }
 }
