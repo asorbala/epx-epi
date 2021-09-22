@@ -38,35 +38,31 @@
                 "$ref": "#/components/schemas/body"
               },
               "examples": {
-                "Request with TransactionID": {
-                  "value": {
-                    "account": "4111111111111111",
-                    "amount": 127.99,
-                    "transaction": 123,
-                    "expirationDate": "1212",
-                    "trackData": "4111111111111111=49121010000000000000?",
-                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101"
-                  }
-                },
-                "Minimal Request": {
+                "Request with TransactionID (BRIC)": {
                   "value": {
                     "amount": 127.99,
-                    "account": "4111111111111111",
-                    "expirationDate": "1212",
-                    "trackData": "4111111111111111=49121010000000000000?",
-                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101"
+                    "batchID": 201203,
+                    "transaction": 181,
+                    "cardEntryMethod": "Z",
+                    "industryType": "E"
                   }
                 },
-                "Request with Invoice and Entry Method": {
+                "Basic Ecommerce Request": {
                   "value": {
-                    "trackData": "4111111111111111=49121010000000000000?",
-                    "amount": 10,
-                    "transaction": 123,
-                    "invoiceNumber": "ABC-123",
-                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101",
-                    "cardEntryMethod": "G",
-                    "expirationDate": "1212",
-                    "account": "4111111111111111"
+                    "account": "4111111111111111",
+                    "expirationDate": 2512,
+                    "amount": 177.99,
+                    "address": {
+                      "address": "123 Any Street",
+                      "zipCode": "12345",
+                      "firstName": "Joe",
+                      "lastName": "Doe"
+                    },
+                    "cvv2": "123",
+                    "batchID": 201203,
+                    "transaction": 177,
+                    "cardEntryMethod": "E",
+                    "industryType": "E"
                   }
                 },
                 "Request with Tax and Enhanced Data": {
@@ -74,15 +70,16 @@
                     "account": "4111111111111111",
                     "amount": 127.99,
                     "transaction": 123,
+                    "batchID": 201203,
                     "taxAmount": 7.99,
                     "taxExempt": "Y",
                     "invoiceNumber": "ABC-123",
                     "expirationDate": "1212",
-                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101",
-                    "trackData": "4111111111111111=49121010000000000000?",
+                    "cardEntryMethod": "E",
+                    "industryType": "E",
                     "enhancedData": [
                       {
-                        "1": "123 Customer Street",
+                        "1": "",
                         "2": "7.99",
                         "3": "1",
                         "4": "0.00",
@@ -102,7 +99,7 @@
                         "line": "1"
                       },
                       {
-                        "1": "123 Main Street",
+                        "1": "",
                         "2": "7.99",
                         "3": "1",
                         "4": "0.00",
@@ -138,9 +135,10 @@
                     "amount": 127.99,
                     "capture": false,
                     "transaction": 123,
-                    "expirationDate": "1212",
-                    "trackData": "4111111111111111=49121010000000000000?",
-                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101"
+                    "batchID": 1,
+                    "cardEntryMethod": "E",
+                    "industryType": "E",
+                    "expirationDate": "1212"
                   }
                 },
                 "Request with Additional Data": {
@@ -148,18 +146,18 @@
                     "amount": 12.99,
                     "account": "4111111111111111",
                     "expirationDate": "2211",
-                    "trackData": "4111111111111111=49121010000000000000?",
-                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101",
                     "cvv2": 123,
                     "invoiceNumber": "ABC-123",
                     "orderNumber": "ABC-123",
                     "transaction": 123,
-                    "firstName": "Joe",
-                    "lastName": "Doe",
-                    "address": "123 Main Street",
-                    "city": "City",
-                    "state": "CA",
-                    "zipCode": "12345",
+                    "address": {
+                      "address": "123 Any Street",
+                      "city": "City",
+                      "state": "CA",
+                      "zipCode": "12345",
+                      "firstName": "Joe",
+                      "lastName": "Doe"
+                    },
                     "cardEntryMethod": "X",
                     "system/tranType": "CCR1",
                     "userdata": {
@@ -170,10 +168,20 @@
                     "referencenumber": "ABC-123",
                     "rentalnumber": "ABC-123"
                   }
+                },
+                "Request with EMV data": {
+                  "value": {
+                    "trackData": "4111111111111111=49121010000000000000?",
+                    "amount": 10,
+                    "transaction": 123,
+                    "emvData": "820258008407A0000000031010950580000080009A031909189C01005F2A0200009F02060000000010009F03060000000000009F090200969F100706011203A088009F1A0208409F1E0842343338323435209F260849081508FDFE3BA79F2701809F33032028009F34031E03009F3501219F36020A029F3704DB0CA0D09F4104000001665F340101",
+                    "cardEntryMethod": "G"
+                  }
                 }
               }
             }
-          }
+          },
+          "description": ""
         },
         "responses": {
           "200": {
@@ -1898,9 +1906,7 @@
       },
       "body": {
         "type": "object",
-        "x-examples": {
-          "example-1": {}
-        },
+        "x-examples": {},
         "properties": {
           "cvv2": {
             "$ref": "#/components/schemas/cvv2"
@@ -1988,11 +1994,7 @@
           }
         },
         "required": [
-          "expirationDate",
-          "amount",
-          "emvData",
-          "trackData",
-          "account"
+          "amount"
         ]
       },
       "inline_response_200": {
@@ -2741,7 +2743,7 @@
         "required": true,
         "schema": {
           "type": "string",
-          "example": "111-222-333-444"
+          "example": "1111-222222-3-4"
         },
         "description": "Merchant's unique 4-part key, generated after boarding with processor"
       },
@@ -2753,7 +2755,7 @@
           "type": "string",
           "example": "0123456789ABCDEF"
         },
-        "description": "HMAC of URL and payload"
+        "description": "HMAC of endpoint and payload"
       },
       "Content-Type": {
         "name": "Content-Type",
@@ -2785,14 +2787,14 @@
         "description": "Transaction ID"
       },
       "bric": {
-        "name": "bric",
+        "name": "BRIC",
         "in": "path",
         "required": true,
         "schema": {
           "type": "string",
           "example": "00DXDBWHB6WA5HJ3D71"
         },
-        "description": "Token generated for each financial transaction"
+        "description": "Token/Transaction ID generated for each financial transaction"
       }
     },
     "responses": {
